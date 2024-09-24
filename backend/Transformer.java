@@ -11,6 +11,7 @@ public class Transformer {
 
         Composer composer = new Composer();
         char root = regexTree.charAt(0);
+        String gauche = null;
 
         if (root == '|' || root == '.') {
             // Trouver les indices des parenthèses et de la virgule
@@ -19,10 +20,14 @@ public class Transformer {
             
             System.out.println("print "+ regexTree);
 
-            int indexParentheseFermante = regexTree.lastIndexOf(')');
             int indexParentheseOuvrante = regexTree.indexOf('(');
             int indexVirgule = regexTree.indexOf(','); //écraser s'il y a plusieurs virgules
-            if (indexParentheseOuvrante != -1) {
+            boolean leftIsSet = false;
+            if (!regexTree.substring(0, indexVirgule).contains("(")){
+                gauche = regexTree.substring(0,1);
+                leftIsSet = true;
+            }
+            if (indexParentheseOuvrante != -1 && !leftIsSet) {
                 int count = 0;
                 for (int i = 0 ; i < regexTree.length(); i++) {
                     if (regexTree.charAt(i) == '(') {
@@ -39,8 +44,10 @@ public class Transformer {
             }
 
             // Extraire la partie gauche (entre '(' et ',')joy
-            String gauche = regexTree.substring(0, indexVirgule);
-
+            if (!leftIsSet){
+                gauche = regexTree.substring(0, indexVirgule);
+            }
+            System.out.println("gauche: "+ gauche);
             // Extraire la partie droite (entre ',' et le dernier ')')
             String droite = regexTree.substring(indexVirgule+1, regexTree.length());
             System.out.println("Je suis rentré ici; gauche: " + gauche + " droite: " + droite);

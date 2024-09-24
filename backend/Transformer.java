@@ -14,21 +14,42 @@ public class Transformer {
 
         if (root == '|' || root == '.') {
             // Trouver les indices des parenthèses et de la virgule
-            int indexParentheseOuvrante = regexTree.indexOf('(');
-            int indexVirgule = regexTree.indexOf(',');
-            int indexParentheseFermante = regexTree.lastIndexOf(')');
+            int len = regexTree.length();
+            regexTree = regexTree.substring(2, len - 1); //retirer le parenthese à la fin
+            
+            System.out.println("print "+ regexTree);
 
-            // Extraire la partie gauche (entre '(' et ',')
-            String gauche = regexTree.substring(indexParentheseOuvrante + 1, indexVirgule);
+            int indexParentheseFermante = regexTree.lastIndexOf(')');
+            int indexParentheseOuvrante = regexTree.indexOf('(');
+            int indexVirgule = regexTree.indexOf(','); //écraser s'il y a plusieurs virgules
+            if (indexParentheseOuvrante != -1) {
+                int count = 0;
+                for (int i = 0 ; i < regexTree.length(); i++) {
+                    if (regexTree.charAt(i) == '(') {
+                        count++;
+                    }
+                    if (regexTree.charAt(i) == ')') {
+                        count--;
+                        if (count == 0) {
+                            indexVirgule = i+1;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Extraire la partie gauche (entre '(' et ',')joy
+            String gauche = regexTree.substring(0, indexVirgule);
 
             // Extraire la partie droite (entre ',' et le dernier ')')
-            String droite = regexTree.substring(indexVirgule + 1, indexParentheseFermante);
+            String droite = regexTree.substring(indexVirgule+1, regexTree.length());
+            System.out.println("Je suis rentré ici; gauche: " + gauche + " droite: " + droite);
 
             if (root == '|') {
-                System.out.println("Je suis rentré ici; gauche: " + gauche + " droite: " + droite);
+                System.out.println("Je suis rentré par '|'");
                 return composer.altern(transformRegExTreeToNDFA(gauche), transformRegExTreeToNDFA(droite));
             } else if (root == '.') {
-                System.out.println("Je suis rentré par la");
+                System.out.println("Je suis rentré par '.'");
                 return composer.concat(transformRegExTreeToNDFA(gauche), transformRegExTreeToNDFA(droite));
             }
         }

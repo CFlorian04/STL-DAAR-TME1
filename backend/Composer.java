@@ -59,7 +59,7 @@ public class Composer {
             }
         }
 
-        System.out.println("result: " + result[3][7]);
+        // System.out.println("result: " + result[3][7]);
 
         return result;
     }

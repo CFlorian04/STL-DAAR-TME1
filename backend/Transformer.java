@@ -12,14 +12,14 @@ public class Transformer {
         Composer composer = new Composer();
         char root = regexTree.charAt(0);
         String gauche = null;
+        int len;
 
-        if (root == '|' || root == '.') {
+        if (root == '|' || root == '.') { //il faut aussi faire fonctionner avec *(ab|cd) et a.*
             // Trouver les indices des parenthèses et de la virgule
-            int len = regexTree.length();
+            len = regexTree.length();
+            System.out.println("Dans | ou . "+ regexTree);
             regexTree = regexTree.substring(2, len - 1); //retirer le parenthese à la fin
             
-            System.out.println("print "+ regexTree);
-
             int indexParentheseOuvrante = regexTree.indexOf('(');
             int indexVirgule = regexTree.indexOf(','); //écraser s'il y a plusieurs virgules
             boolean leftIsSet = false;
@@ -46,45 +46,30 @@ public class Transformer {
             // Extraire la partie gauche (entre '(' et ',')joy
             if (!leftIsSet){
                 gauche = regexTree.substring(0, indexVirgule);
+                System.out.println("gauche: "+ gauche);
             }
-            System.out.println("gauche: "+ gauche);
             // Extraire la partie droite (entre ',' et le dernier ')')
             String droite = regexTree.substring(indexVirgule+1, regexTree.length());
-            System.out.println("Je suis rentré ici; gauche: " + gauche + " droite: " + droite);
-
+            
             if (root == '|') {
-                System.out.println("Je suis rentré par '|'");
+                System.out.println("Je suis rentré par '|' gauche: " + gauche + " droite: " + droite);
                 return composer.altern(transformRegExTreeToNDFA(gauche), transformRegExTreeToNDFA(droite));
             } else if (root == '.') {
-                System.out.println("Je suis rentré par '.'");
+                System.out.println("Je suis rentré par '.' gauche: " + gauche + " droite: " + droite);
                 return composer.concat(transformRegExTreeToNDFA(gauche), transformRegExTreeToNDFA(droite));
             }
         }
         // Check if there is an asterisk in the regexTree
         int indexOfAsterisk = regexTree.indexOf('*');
-        System.out.println("indice" + indexOfAsterisk);// Étape 3 : Trouver la dernière parenthèse fermante
+        System.out.println("indice" + root);// Étape 3 : Trouver la dernière parenthèse fermante
                                                        // correspondante
-
-        if (indexOfAsterisk != -1) {
-            // Étape 2 : Trouver la première parenthèse ouvrante après *
-            int indexOfOpeningParenthesis = regexTree.indexOf('(', indexOfAsterisk);
-
-            if (indexOfOpeningParenthesis != -1) {
-                int indexOfClosingParenthesis = regexTree.indexOf(')', indexOfOpeningParenthesis);
-
-                if (indexOfClosingParenthesis != -1) {
-                    // Étape 4 : Extraire le texte entre les parenthèses
-                    String valeur = regexTree.substring(indexOfOpeningParenthesis + 1, indexOfClosingParenthesis)
-                            .trim();
-                    return composer.star(transformRegExTreeToNDFA(valeur));
-                } else {
-                    System.out.println("Parenthèse fermante non trouvée.");
-                }
-            } else {
-                System.out.println("Parenthèse ouvrante non trouvée après *.");
-            }
+        if (root == '*') {
+            len = regexTree.length();
+            regexTree = regexTree.substring(2, len - 1);
+            System.out.println("Dans *");
+            System.out.println("Dedans "+ regexTree);
+            return composer.star(transformRegExTreeToNDFA(regexTree));
         }
-        // if (!regexTree.contains("("))
         return transformLetterToCharArray(root);
     }
 

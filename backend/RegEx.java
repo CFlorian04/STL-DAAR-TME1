@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.lang.Exception;
 
 class RegEx {
   // MACROS
@@ -11,6 +12,9 @@ class RegEx {
   static final int PARENTHESEOUVRANT = 0x16641664;
   static final int PARENTHESEFERMANT = 0x51515151;
   static final int DOT = 0xD07;
+
+  static final char epsilon = 'E';
+  static final char empty_char = '\u0000';
 
   // REGEX
   private static String regEx;
@@ -26,6 +30,7 @@ class RegEx {
       regEx = arg[0];
     } else {
       Scanner scanner = new Scanner(System.in);
+
       System.out.print("  >> Please enter a regEx: ");
       regEx = scanner.next();
       scanner.close();
@@ -49,9 +54,12 @@ class RegEx {
         System.err.println("  >> ERROR: syntax error for regEx \"" + regEx + "\".");
       }
       // My own code
-      Transformer transformer = new Transformer();
+      Transformer transformer = new Transformer(empty_char, epsilon);
       char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
       transformer.displayMatrix(ndfa);
+
+      transformer.transformNDFAtoDFA(ndfa);
+
       // End of my own code
     }
 
@@ -62,13 +70,6 @@ class RegEx {
 
   // FROM REGEX TO SYNTAX TREE
   private static RegExTree parse() throws Exception {
-    // BEGIN DEBUG: set conditionnal to true for debug example
-    if (false)
-      throw new Exception();
-    RegExTree example = exampleAhoUllman();
-    if (false)
-      return example;
-    // END DEBUG
 
     ArrayList<RegExTree> result = new ArrayList<RegExTree>();
     for (int i = 0; i < regEx.length(); i++)

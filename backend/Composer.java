@@ -1,6 +1,10 @@
 public class Composer {
 
-    Composer() {
+    char empty_char, epsilon;
+
+    Composer(char p_empty_char, char p_epsilon) {
+        empty_char = p_empty_char;
+        epsilon = p_epsilon;
     }
 
     char[][] concat(char[][] matrix1, char[][] matrix2) {
@@ -16,7 +20,7 @@ public class Composer {
                 result[i][j] = matrix1[i][j];
             }
         }
-        result[lengthRow1 - 1][lengthCol1] = 'E';
+        result[lengthRow1 - 1][lengthCol1] = epsilon;
         for (int i = 0; i < matrix2.length; i++) {
             for (int j = 0; j < matrix2[0].length; j++) {
                 result[i + lengthRow1][j + lengthCol1] = matrix2[i][j];
@@ -33,8 +37,8 @@ public class Composer {
                 result[i][j] = matrix1[i][j];
             }
         }
-        result[0][matrix1[0].length - 1] = 'E';
-        result[matrix1.length - 2][1] = 'E';
+        result[0][matrix1[0].length - 1] = epsilon;
+        result[matrix1.length - 2][1] = epsilon;
         return result;
     }
 
@@ -48,8 +52,8 @@ public class Composer {
                 result[i][j] = matrix1[i][j];
             }
         }
-        result[0][lengthCol1] = 'E';
-        result[lengthRow1 - 1][matrix1[0].length + matrix2[0].length - 1] = 'E';
+        result[0][lengthCol1] = epsilon;
+        result[lengthRow1 - 1][matrix1[0].length + matrix2[0].length - 1] = epsilon;
         for (int i = 0; i < matrix2.length; i++) {
             for (int j = 0; j < matrix2[0].length; j++) {
                 if (i == lengthRow1 && j == lengthCol1) {
@@ -58,8 +62,6 @@ public class Composer {
                 result[i + lengthRow1][j + lengthCol1] = matrix2[i][j];
             }
         }
-
-        System.out.println("result: " + result[3][7]);
 
         return result;
     }

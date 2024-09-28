@@ -12,12 +12,11 @@ public class Transformer {
         Composer composer = new Composer();
         char root = regexTree.charAt(0);
         String gauche = null;
-        int len;
+        int len = regexTree.length();;
 
-        if (root == '|' || root == '.') { //il faut aussi faire fonctionner avec *(ab|cd) et a.*
+        if ((root == '|' || root == '.') && len > 1) { //il faut aussi faire fonctionner avec (ab|cd)* et a.*
             // Trouver les indices des parenthèses et de la virgule
-            len = regexTree.length();
-            System.out.println("Dans | ou . "+ regexTree);
+            System.out.println("Dans | ou . " + regexTree);
             regexTree = regexTree.substring(2, len - 1); //retirer le parenthese à la fin
             
             int indexParentheseOuvrante = regexTree.indexOf('(');

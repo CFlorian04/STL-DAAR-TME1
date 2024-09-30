@@ -4,6 +4,9 @@ import java.io.IOException;
 
 public class AlgorithmeKMP {
 
+    // Mode de test pour ne pas afficher les résultats dans la console
+    private static boolean TestMode = false;
+
     // Méthode principale pour rechercher un motif dans un texte
     public static boolean chercherMotif(String motif, String texte, int line_number, boolean showUnfound) {
         boolean found = false;
@@ -26,12 +29,14 @@ public class AlgorithmeKMP {
 
             // Si on a trouvé le motif complet
             if (indexMotif == longueurMotif) {
-                String textHighlighted = texte.substring(0, indexTexte - indexMotif) +
-                        "\u001B[31m" + texte.substring(indexTexte - indexMotif, indexTexte) + "\u001B[0m" +
-                        texte.substring(indexTexte);
-                System.out.println(
-                        line_number + " ( " + (indexTexte - indexMotif) + " : " + (indexTexte - 1) + " ) \t: "
-                                + textHighlighted);
+                if (!TestMode) {
+                    String textHighlighted = texte.substring(0, indexTexte - indexMotif) +
+                            "\u001B[31m" + texte.substring(indexTexte - indexMotif, indexTexte) + "\u001B[0m" +
+                            texte.substring(indexTexte);
+                    System.out.println(String.format("Ligne %s (%s : %s) : %s",
+                            String.format("% 5d", line_number), String.format("% 3d", indexTexte - indexMotif),
+                            String.format("% 3d", indexTexte - 1), textHighlighted));
+                }
                 // Revenir au dernier décalage possible
                 indexMotif = LPS[indexMotif - 1];
                 found = true;
@@ -47,7 +52,7 @@ public class AlgorithmeKMP {
                 }
             }
         }
-        if (!found && showUnfound) {
+        if (!TestMode && !found && showUnfound) {
             System.out.println("Motif non trouvé dans le texte : " + texte);
         }
         return found;
@@ -58,7 +63,7 @@ public class AlgorithmeKMP {
     }
 
     // Nouvelle méthode pour chercher un motif dans un fichier texte
-    public static boolean chercheMotif(String motif, String cheminFichier) {
+    public static boolean chercheMotifDansFichier(String motif, String cheminFichier) {
         boolean found = false;
         try {
             BufferedReader lecteur = new BufferedReader(new FileReader(cheminFichier));
@@ -75,10 +80,12 @@ public class AlgorithmeKMP {
 
             lecteur.close();
         } catch (IOException e) {
-            System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+            if (!TestMode) {
+                System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+            }
         }
 
-        if (!found) {
+        if (!TestMode && !found) {
             System.out.println("Motif non trouvé dans le fichier " + cheminFichier);
         }
         return found;
@@ -111,12 +118,20 @@ public class AlgorithmeKMP {
     }
 
     public static void main(String[] args) {
-        String motif = "England";
+        String motif = "Chihuahua";
 
-        String texte = "ABABDABACDABABCABAB";
-        chercherMotif(motif, texte);
+        // String texte = "ABABDABACDABABCABAB";
+        // chercherMotif(motif, texte);
 
         String cheminFichier = "./backend/examples/41011-0.txt";
-        chercheMotif(motif, cheminFichier);
+        chercheMotifDansFichier(motif, cheminFichier);
+    }
+
+    AlgorithmeKMP() {
+        AlgorithmeKMP.TestMode = false;
+    }
+
+    AlgorithmeKMP(boolean TestMode) {
+        AlgorithmeKMP.TestMode = TestMode;
     }
 }

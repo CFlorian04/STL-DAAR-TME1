@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 class RegEx {
@@ -52,6 +53,9 @@ class RegEx {
       Transformer transformer = new Transformer();
       char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
       transformer.displayMatrix(ndfa);
+      System.out.println("longueur de char[][] : "+ ndfa.length);
+      HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa);
+      transformer.afficherHashMap(dfa);
       // End of my own code
     }
 

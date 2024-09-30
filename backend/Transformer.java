@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 public class Transformer {
@@ -77,16 +78,17 @@ public class Transformer {
     }
 
     // Transformer le NDFA en DFA avec un tableau de char[][]
-    HashMap<String, HashMap<String, String>> transformNDFAToDFA(char[][] ndfa, int n) {
+    HashMap<String, HashMap<String, String>> transformNDFAToDFA(char[][] ndfa) {
 
         HashMap<String, HashMap<String, String>> dfa = new HashMap<>();
-        HashMap<String, Boolean> startState;
-        HashMap<String, Boolean> finalState;
-        //Qui sont les lettres qui vont devenir des keys -> on parcourt le tableau de char et si c'est different de ' ' et \u0000, c'en est une
+        HashMap<String, Boolean> startState = new HashMap<>();
+        HashMap<String, Boolean> finalState = new HashMap<>();
         Queue<Integer> successorList;
         HashSet<Integer> visited; //   rapide et indice unique
+        List<Character> letters = extractKeys(ndfa); //letters are the HashMap's keys 
 
-        List<String> letters = extractKeys(ndfa); //letters are the HashMap's keys 
+        //findFinal State
+        int acceptedState = findFinalStates(ndfa);
 
         //trouver les etats de depart
         String state = "0";//Depart
@@ -99,6 +101,7 @@ public class Transformer {
         boolean redondance = false;//à definir
         Queue<String> departState = new LinkedList<>();
         departState.add(state);
+
         while (!departState.isEmpty()) { //autre condition à ajouter
             String currentState = departState.poll();
             HashMap<String, String> dfa_rows = createMapWithKeys(letters);//je peux inserer directement les valeurs aussi (peut etre)
@@ -108,66 +111,78 @@ public class Transformer {
                 successorList = new LinkedList<>();
                 visited = new HashSet<>();
                 boolean letterFound = false;
-                char letter='\u0000';
 
-
-                //!!!Il faut que la lettre à rechercher soit les keys parcourues une à une; à chaque lettre ses visited state
-
-                boolean start = true;
-                while (!successorList.isEmpty() || start) { 
-                    start = false;
-                    if (!start) {
-                        index = successorList.poll();
-                    } 
-                    for (int j = 0; j < ndfa[index].length; j++) {
-                        //si on trouve des lettres autres que ' ' et \u0000, on trouve ses successeurs si le chemin € existe
-                        if ((!letterFound && !(ndfa[index][j] == ' ' && ndfa[index][j] == '\u0000')) || (letterFound && ndfa[index][j] == ' ')) {
-                            //si on trouve une lettre, on stock dans une liste les indices des successeurs à visiter
-                            letterFound = true;
-                            if (!visited.contains(j)) { //si j n'est pas dans la liste de successeur, on l'ajoute
-                                letter = ndfa[index][j];
-                                successorList.add(j);
-                                visited.add(j);
+                for (char letter : letters) {
+                    
+                    //!!!Il faut que la lettre à rechercher soit les keys parcourues une à une; à chaque lettre ses visited state
+                    boolean inStart = true;
+                    while (!successorList.isEmpty() || inStart) { 
+                        if (!inStart) {
+                            index = successorList.poll();
+                        } 
+                        inStart = false;
+                        for (int j = 0; j < ndfa[index].length; j++) {
+                            //si on trouve des lettres autres que ' ' et \u0000, on trouve ses successeurs si le chemin € existe
+                            if ((!letterFound && ndfa[index][j] == letter) || (letterFound && ndfa[index][j] == ' ')) {
+                                //si on trouve une lettre, on stock dans une liste les indices des successeurs à visiter
+                                letterFound = true;
+                                if (!visited.contains(j)) { //si j n'est pas dans la liste de successeur, on l'ajoute
+                                    letter = ndfa[index][j];
+                                    successorList.add(j);
+                                    visited.add(j);
+                                }
                             }
                         }
                     }
+                    StringBuilder result = new StringBuilder();
+                    for (Integer numberState : visited) {
+                        result.append(numberState.toString()); // Convertir chaque entier en String et ajouter
+                    }
+                    if (letterFound) {
+                        dfa.get(currentState).put(letter+"", result.toString()); // a verifier
+                        departState.add(result.toString()); // il faut qu'a un moment donnée, on n'ajoute plus
+                    }
+
+                    if (result.toString().contains(acceptedState+"")) {
+                        finalState.put(currentState, true);
+                    } else {
+                        finalState.put(currentState, false);
+                    }
+                    boolean alreadySet = false;
+                    for (String element : departState) {
+                        if (currentState.contains(element) && !alreadySet) {
+                            startState.put(currentState, true);
+                            alreadySet = true;
+                        } else {
+                            startState.put(currentState, false);
+                        }
+                    }
                 }
-                StringBuilder result = new StringBuilder();
-                for (Integer number : visited) {
-                    result.append(number.toString()); // Convertir chaque entier en String et ajouter
-                }
-                dfa.get(state).put(letter+"", result.toString()); // a verifier
-                departState.add(result.toString());
             }
         }
         return dfa;
     }
 
 
-    List<String> extractKeys(char[][] ndfa) {
-        List<String> keys = new ArrayList<>();
-        
-        for (char[] ndfaRows : ndfa) {
-            for (char elem : ndfaRows) {
-                // Vérifier que l'élément est valide (ni espace ni caractère null)
-                if (elem != ' ' && elem != '\u0000') {
-                    String key = String.valueOf(elem);
-                    if (!keys.contains(key)) { // Éviter les doublons
-                        keys.add(key);
-                    }
+    List<Character> extractKeys(char[][] ndfa) {
+        HashSet<Character> letters = new HashSet<>();
+        for (char[] row : ndfa) {
+            for (char c : row) {
+                if (c != ' ' && c != '\u0000') { // Ignorer les transitions vides ou invalides
+                    letters.add(c);
                 }
             }
         }
-        return keys;
+        return new ArrayList<>(letters);
     }
 
     // Méthode pour créer un HashMap avec les clés réutilisables
-    public static HashMap<String, String> createMapWithKeys(List<String> keys) {
+    public static HashMap<String, String> createMapWithKeys(List<Character> keys) {
         HashMap<String, String> map = new HashMap<>();
-        
+
         // Initialiser chaque clé avec une valeur par défaut (ou autre logique)
-        for (String key : keys) {
-            map.put(key, ""); // Valeur par défaut
+        for (Character key : keys) {
+            map.put(key.toString(), ""); // Valeur par défaut
         }
         
         return map;
@@ -182,9 +197,9 @@ public class Transformer {
     // Transformer une lettre en tableau de char[][]
     char[][] transformLetterToCharArray(char letter) {
         char[][] array = new char[4][4];
-        array[0][1] = 'E'; // Space would be like epsilon
+        array[0][1] = ' '; // Space would be like epsilon
         array[1][2] = letter;
-        array[2][3] = 'E';
+        array[2][3] = ' ';
         return array;
     }
 
@@ -192,16 +207,20 @@ public class Transformer {
     void displayMatrix(char[][] matrice) {
         for (char[] ligne : matrice) {
             for (char caractere : ligne) {
-                System.out.print(caractere + " ");
+                if (caractere == ' ') {
+                    System.out.print("E");
+                } else {
+                    System.out.print(caractere + " ");
+                }
             }
             System.out.println();
         }
     }
 
     // Trouver les sommets états finals
-    int[] findFinalStates(char[][] matrix) {
+    int findFinalStates(char[][] matrix) {
 
-        List<Integer> finalStatesList = new ArrayList<>();
+        int acceptedState = 0;
         for (int i = 0; i < matrix.length; i++) {
             // test if the default value in char[][] is modified in the current row
             boolean modified = false;
@@ -212,9 +231,27 @@ public class Transformer {
                 }
             }
             if (!modified) {
-                finalStatesList.add(i);
+                acceptedState = i;
             }
         }
-        return finalStatesList.stream().mapToInt(Integer::intValue).toArray();
+        return acceptedState;
+    }
+
+    // Fonction pour afficher le contenu du HashMap
+    public void afficherHashMap(HashMap<String, HashMap<String, String>> map) {
+        // Parcourir le HashMap externe
+        for (Map.Entry<String, HashMap<String, String>> outerEntry : map.entrySet()) {
+            String outerKey = outerEntry.getKey();
+            HashMap<String, String> innerMap = outerEntry.getValue();
+
+            System.out.println("Clé du HashMap externe: " + outerKey);
+
+            // Parcourir le HashMap interne
+            for (Map.Entry<String, String> innerEntry : innerMap.entrySet()) {
+                String innerKey = innerEntry.getKey();
+                String innerValue = innerEntry.getValue();
+                System.out.println("  Clé interne: " + innerKey + ", Valeur interne: " + innerValue);
+            }
+        }
     }
 }

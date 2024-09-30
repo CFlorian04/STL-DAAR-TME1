@@ -1,7 +1,12 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class AlgorithmeKMP {
 
     // Méthode principale pour rechercher un motif dans un texte
-    public static void chercherMotif(String motif, String texte) {
+    public static boolean chercherMotif(String motif, String texte, int line_number, boolean showUnfound) {
+        boolean found = false;
         int longueurMotif = motif.length();
         int longueurTexte = texte.length();
 
@@ -21,9 +26,15 @@ public class AlgorithmeKMP {
 
             // Si on a trouvé le motif complet
             if (indexMotif == longueurMotif) {
-                System.out.println("Motif trouvé à l'indice " + (indexTexte - indexMotif));
+                String textHighlighted = texte.substring(0, indexTexte - indexMotif) +
+                        "\u001B[31m" + texte.substring(indexTexte - indexMotif, indexTexte) + "\u001B[0m" +
+                        texte.substring(indexTexte);
+                System.out.println(
+                        line_number + " ( " + (indexTexte - indexMotif) + " : " + (indexTexte - 1) + " ) \t: "
+                                + textHighlighted);
                 // Revenir au dernier décalage possible
                 indexMotif = LPS[indexMotif - 1];
+                found = true;
             }
             // Si les caractères ne correspondent pas
             else if (indexTexte < longueurTexte && motif.charAt(indexMotif) != texte.charAt(indexTexte)) {
@@ -36,6 +47,41 @@ public class AlgorithmeKMP {
                 }
             }
         }
+        if (!found && showUnfound) {
+            System.out.println("Motif non trouvé dans le texte : " + texte);
+        }
+        return found;
+    }
+
+    public static boolean chercherMotif(String motif, String texte) {
+        return chercherMotif(motif, texte, 0, true);
+    }
+
+    // Nouvelle méthode pour chercher un motif dans un fichier texte
+    public static boolean chercheMotif(String motif, String cheminFichier) {
+        boolean found = false;
+        try {
+            BufferedReader lecteur = new BufferedReader(new FileReader(cheminFichier));
+            String ligne;
+            int numeroLigne = 1;
+
+            while ((ligne = lecteur.readLine()) != null) {
+                boolean localFound = chercherMotif(motif, ligne, numeroLigne, false);
+                if (!found && localFound) {
+                    found = true;
+                }
+                numeroLigne++;
+            }
+
+            lecteur.close();
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+        }
+
+        if (!found) {
+            System.out.println("Motif non trouvé dans le fichier " + cheminFichier);
+        }
+        return found;
     }
 
     // Construire le LPS (Longest Prefix Suffix)
@@ -65,8 +111,12 @@ public class AlgorithmeKMP {
     }
 
     public static void main(String[] args) {
+        String motif = "England";
+
         String texte = "ABABDABACDABABCABAB";
-        String motif = "ABABCABAB";
         chercherMotif(motif, texte);
+
+        String cheminFichier = "./backend/examples/41011-0.txt";
+        chercheMotif(motif, cheminFichier);
     }
 }

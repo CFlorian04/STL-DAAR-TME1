@@ -107,10 +107,10 @@ public class Transformer {
             currentState = departState.poll();
             //je peux inserer directement les valeurs aussi (peut etre)
             dfa.put(currentState, createMapWithKeys(letters));
-            for (char c : currentState.toCharArray()) {
-                int index = c - '0'; // Convertit le char en entier
+            for (char letter : letters) {
+                for (char c : currentState.toCharArray()) {
+                    int index = c - '0'; // Convertit le char en entier
                 
-                for (char letter : letters) {
                     System.out.println("lettre apres while :"+letter);
                     successorList = new LinkedList<>();
                     visited = new HashSet<>();
@@ -122,19 +122,20 @@ public class Transformer {
                             index = successorList.poll();
                         } 
                         beginToSearch = false;
-                        for (int j = 0; j < ndfa[index].length; j++) { // pracourir les colonnes de ndfa
+                        for (int j = 0; j < ndfa[index].length; j++) { // parcourir les colonnes de ndfa
                             //si on trouve des lettres autres que ' ' et \u0000, on trouve ses successeurs si le chemin € existe
-                            if ((!letterFound && ndfa[index][j] == letter) || (letterFound && ndfa[index][j] == ' ')) {
+                            if ((ndfa[index][j] == letter) || (letterFound && ndfa[index][j] == ' ')) {
                                 //si on trouve une lettre, on stock dans une liste les indices des successeurs à visiter
                                 letterFound = true;
                                 if (!visited.contains(j)) { //si j n'est pas dans la liste de successeur, on l'ajoute
                                     successorList.add(j);
                                     visited.add(j);
                                 }
+                                index=j;
                             }
                         }
                     }
-            
+
                     if (!visited.isEmpty()){
                         result = new StringBuilder();
                         for (Integer elem : visited) {
@@ -142,7 +143,9 @@ public class Transformer {
                         }
                         System.out.println("letter: "+letter+" <-ajouter");
                         dfa.get(currentState).put(""+letter, result.toString()); // a verifier
-                        departState.add(result.toString()); // il faut qu'a un moment donnée, on n'ajoute plus
+                        if (!result.toString().equals(currentState)) { // ne pas avoir une redondance dans le current state
+                            departState.add(result.toString()); // il faut qu'a un moment donnée, on n'ajoute plus
+                        }
                     }
 
                     if (currentState.contains(acceptedState+"")) {

@@ -86,64 +86,66 @@ public class Transformer {
         Queue<Integer> successorList;
         HashSet<Integer> visited; //   rapide et indice unique
         List<Character> letters = extractKeys(ndfa); //letters are the HashMap's keys 
-
+        boolean letterFound;
+        boolean beginToSearch;
+        String currentState;
+        StringBuilder result;
         //findFinal State
         int acceptedState = findFinalStates(ndfa);
 
         //trouver les etats de depart
+        Queue<String> departState = new LinkedList<>();
         String state = "0";//Depart
         for (int j = 0; j < ndfa[0].length; j++) {
             if (ndfa[0][j] == ' '){
                 state += j;
             }
         }
-        //boucle à definir
-        boolean redondance = false;//à definir
-        Queue<String> departState = new LinkedList<>();
         departState.add(state);
 
         while (!departState.isEmpty()) { //autre condition à ajouter
-            String currentState = departState.poll();
-            HashMap<String, String> dfa_rows = createMapWithKeys(letters);//je peux inserer directement les valeurs aussi (peut etre)
-            dfa.put(currentState, dfa_rows);
+            currentState = departState.poll();
+            //je peux inserer directement les valeurs aussi (peut etre)
+            dfa.put(currentState, createMapWithKeys(letters));
             for (char c : currentState.toCharArray()) {
                 int index = c - '0'; // Convertit le char en entier
-                successorList = new LinkedList<>();
-                visited = new HashSet<>();
-                boolean letterFound = false;
-
+                
                 for (char letter : letters) {
-                    
+                    System.out.println("lettre apres while :"+letter);
+                    successorList = new LinkedList<>();
+                    visited = new HashSet<>();
+                    letterFound = false;
                     //!!!Il faut que la lettre à rechercher soit les keys parcourues une à une; à chaque lettre ses visited state
-                    boolean inStart = true;
-                    while (!successorList.isEmpty() || inStart) { 
-                        if (!inStart) {
+                    beginToSearch = true;
+                    while (!successorList.isEmpty() || beginToSearch) { 
+                        if (!beginToSearch) {
                             index = successorList.poll();
                         } 
-                        inStart = false;
-                        for (int j = 0; j < ndfa[index].length; j++) {
+                        beginToSearch = false;
+                        for (int j = 0; j < ndfa[index].length; j++) { // pracourir les colonnes de ndfa
                             //si on trouve des lettres autres que ' ' et \u0000, on trouve ses successeurs si le chemin € existe
                             if ((!letterFound && ndfa[index][j] == letter) || (letterFound && ndfa[index][j] == ' ')) {
                                 //si on trouve une lettre, on stock dans une liste les indices des successeurs à visiter
                                 letterFound = true;
                                 if (!visited.contains(j)) { //si j n'est pas dans la liste de successeur, on l'ajoute
-                                    letter = ndfa[index][j];
                                     successorList.add(j);
                                     visited.add(j);
                                 }
                             }
                         }
                     }
-                    StringBuilder result = new StringBuilder();
-                    for (Integer numberState : visited) {
-                        result.append(numberState.toString()); // Convertir chaque entier en String et ajouter
-                    }
-                    if (letterFound) {
-                        dfa.get(currentState).put(letter+"", result.toString()); // a verifier
+            
+                    if (!visited.isEmpty()){
+                        result = new StringBuilder();
+                        for (Integer elem : visited) {
+                            result.append(elem.toString()); // Convertir chaque entier en String et ajouter
+                        }
+                        System.out.println("letter: "+letter+" <-ajouter");
+                        dfa.get(currentState).put(""+letter, result.toString()); // a verifier
                         departState.add(result.toString()); // il faut qu'a un moment donnée, on n'ajoute plus
                     }
 
-                    if (result.toString().contains(acceptedState+"")) {
+                    if (currentState.contains(acceptedState+"")) {
                         finalState.put(currentState, true);
                     } else {
                         finalState.put(currentState, false);
@@ -170,6 +172,7 @@ public class Transformer {
             for (char c : row) {
                 if (c != ' ' && c != '\u0000') { // Ignorer les transitions vides ou invalides
                     letters.add(c);
+                    System.out.println("key:"+c);
                 }
             }
         }

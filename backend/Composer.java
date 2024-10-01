@@ -74,7 +74,7 @@ public class Composer {
             }
         }
         result[0][matrix1[0].length] = ' ';
-        result[result.length-1][matrix1[0].length] = ' ';
+        result[result.length-1][matrix1[0].length-1] = ' ';
         return result;
     }
 }

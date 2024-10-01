@@ -53,7 +53,7 @@ class RegEx {
       Transformer transformer = new Transformer();
       char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
       transformer.displayMatrix(ndfa);
-      System.out.println("longueur de char[][] : "+ ndfa.length);
+      // if(ndfa[5][3] == ' ') System.out.println("true");
       HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa);
       transformer.afficherHashMap(dfa);
       // End of my own code

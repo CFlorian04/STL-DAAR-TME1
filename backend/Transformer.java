@@ -93,19 +93,33 @@ public class Transformer {
         //findFinal State
         int acceptedState = findFinalStates(ndfa);
 
-        //trouver les etats de depart
+        //Trouver les etats de depart
         Queue<String> departState = new LinkedList<>();
-        String state = "0";//Depart
-        for (int j = 0; j < ndfa[0].length; j++) {
-            if (ndfa[0][j] == ' '){
-                state += j;
+        StringBuilder state = new StringBuilder(); //Trouver les etats du depart 
+        visited = new HashSet<>();
+        successorList = new LinkedList<>();
+        successorList.add(0);
+        while (!successorList.isEmpty()) {
+            int indice = successorList.poll();
+            visited.add(indice);
+            for (int j = 0; j < ndfa.length; j++) {
+                if(ndfa[indice][j]==' ') {
+                    if (!visited.contains(j)) { //si j n'est pas dans la liste de successeur, on l'ajoute
+                        successorList.add(j);
+                        visited.add(j);
+                    }
+                }
             }
         }
-        departState.add(state);
+        // Convertir chaque entier en String et ajouter
+        for (Integer elem : visited) {
+            state.append(elem.toString());
+        }
+        departState.add(state.toString());
 
-        while (!departState.isEmpty()) { //autre condition à ajouter
+        // construction de la Dfa
+        while (!departState.isEmpty()) {
             currentState = departState.poll();
-            //je peux inserer directement les valeurs aussi (peut etre)
             dfa.put(currentState, createMapWithKeys(letters));
             for (char letter : letters) {
                 for (char c : currentState.toCharArray()) {
@@ -131,7 +145,7 @@ public class Transformer {
                                     successorList.add(j);
                                     visited.add(j);
                                 }
-                                index=j;
+                                index=j; // a mediter
                             }
                         }
                     }

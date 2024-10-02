@@ -5,10 +5,10 @@ import java.io.IOException;
 public class AlgorithmeKMP {
 
     // Mode de test pour ne pas afficher les résultats dans la console
-    private static boolean TestMode = false;
+    private static boolean showLog;
 
     // Méthode principale pour rechercher un motif dans un texte
-    public static boolean chercherMotif(String motif, String texte, int line_number, boolean showUnfound) {
+    private static boolean findPattern(String motif, String texte, int line_number, boolean showUnfound) {
         boolean found = false;
         int longueurMotif = motif.length();
         int longueurTexte = texte.length();
@@ -29,7 +29,7 @@ public class AlgorithmeKMP {
 
             // Si on a trouvé le motif complet
             if (indexMotif == longueurMotif) {
-                if (!TestMode) {
+                if (showLog) {
                     String textHighlighted = texte.substring(0, indexTexte - indexMotif) +
                             "\u001B[31m" + texte.substring(indexTexte - indexMotif, indexTexte) + "\u001B[0m" +
                             texte.substring(indexTexte);
@@ -52,18 +52,18 @@ public class AlgorithmeKMP {
                 }
             }
         }
-        if (!TestMode && !found && showUnfound) {
+        if (showLog && !found && showUnfound) {
             System.out.println("Motif non trouvé dans le texte : " + texte);
         }
         return found;
     }
 
-    public static boolean chercherMotif(String motif, String texte) {
-        return chercherMotif(motif, texte, 0, true);
+    public static boolean findPatternInText(String motif, String texte) {
+        return findPattern(motif, texte, 0, true);
     }
 
     // Nouvelle méthode pour chercher un motif dans un fichier texte
-    public static boolean chercheMotifDansFichier(String motif, String cheminFichier) {
+    public static boolean findPatternInFile(String motif, String cheminFichier) {
         boolean found = false;
         try {
             BufferedReader lecteur = new BufferedReader(new FileReader(cheminFichier));
@@ -71,7 +71,7 @@ public class AlgorithmeKMP {
             int numeroLigne = 1;
 
             while ((ligne = lecteur.readLine()) != null) {
-                boolean localFound = chercherMotif(motif, ligne, numeroLigne, false);
+                boolean localFound = findPattern(motif, ligne, numeroLigne, false);
                 if (!found && localFound) {
                     found = true;
                 }
@@ -80,15 +80,43 @@ public class AlgorithmeKMP {
 
             lecteur.close();
         } catch (IOException e) {
-            if (!TestMode) {
+            if (showLog) {
                 System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
             }
         }
 
-        if (!TestMode && !found) {
+        if (showLog && !found) {
             System.out.println("Motif non trouvé dans le fichier " + cheminFichier);
         }
         return found;
+    }
+
+    public static int getOccurencesInFile(String motif, String cheminFichier) {
+        int occurences = 0;
+        try {
+            BufferedReader lecteur = new BufferedReader(new FileReader(cheminFichier));
+            String ligne;
+            int numeroLigne = 1;
+
+            while ((ligne = lecteur.readLine()) != null) {
+                boolean localFound = findPattern(motif, ligne, numeroLigne, false);
+                if (localFound) {
+                    occurences += 1;
+                }
+                numeroLigne++;
+            }
+
+            lecteur.close();
+        } catch (IOException e) {
+            if (showLog) {
+                System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+            }
+        }
+
+        if (showLog && occurences == 0) {
+            System.out.println("Motif non trouvé dans le fichier " + cheminFichier);
+        }
+        return occurences;
     }
 
     // Construire le LPS (Longest Prefix Suffix)
@@ -121,17 +149,17 @@ public class AlgorithmeKMP {
         String motif = "Chihuahua";
 
         // String texte = "ABABDABACDABABCABAB";
-        // chercherMotif(motif, texte);
+        // findPattern(motif, texte);
 
         String cheminFichier = "./backend/examples/41011-0.txt";
-        chercheMotifDansFichier(motif, cheminFichier);
+        getOccurencesInFile(motif, cheminFichier);
     }
 
     AlgorithmeKMP() {
-        AlgorithmeKMP.TestMode = false;
+        AlgorithmeKMP.showLog = true;
     }
 
-    AlgorithmeKMP(boolean TestMode) {
-        AlgorithmeKMP.TestMode = TestMode;
+    AlgorithmeKMP(boolean showLog) {
+        AlgorithmeKMP.showLog = showLog;
     }
 }

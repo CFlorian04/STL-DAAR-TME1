@@ -1,7 +1,11 @@
 public class Composer {
 
-    Composer() {
+    char empty_char, epsilon;
+
+    Composer(char p_epsilon) {
+        epsilon = p_epsilon;
     }
+    
 
     //à verifier
     char[][] concat(char[][] matrix1, char[][] matrix2) {
@@ -29,7 +33,7 @@ public class Composer {
             // Copier chaque ligne de matrix2 dans result à la position décalée
             System.arraycopy(matrix2[i], 0, result[i + length1], length1, matrix2[i].length);
         }
-        result[length1 - 1][length1] = ' ';
+        result[length1 - 1][length1] = epsilon;
 
         return result;
     }
@@ -45,8 +49,8 @@ public class Composer {
             System.arraycopy(matrix1[i], 0, result[i], 0, matrix1[i].length);
         }
 
-        result[0][matrix1[0].length - 1] = ' ';
-        result[matrix1.length - 2][1] = ' ';
+        result[0][matrix1[0].length - 1] = epsilon;
+        result[matrix1.length - 2][1] = epsilon;
         return result;
     }
 
@@ -71,10 +75,10 @@ public class Composer {
                 result[(i+lengthRow1+2)][(j+lengthCol1+2)] = matrix2[i][j];
             }
         }
-        result[0][1] = ' ';
-        result[0][lengthCol1+2] = ' ';
-        result[lengthRow1][lengthCol1+1] = ' ';
-        result[lengthRow1 + matrix2.length +1 ][lengthCol1+1] = ' ';
+        result[0][1] = epsilon;
+        result[0][lengthCol1+2] = epsilon;
+        result[lengthRow1][lengthCol1+1] = epsilon;
+        result[lengthRow1 + matrix2.length +1 ][lengthCol1+1] = epsilon;
         return result;
     }
 }

@@ -22,6 +22,10 @@ class RegEx {
 
   // MAIN
   public static void main(String arg[]) {
+
+    HashMap<String, Boolean> startState = new HashMap<>();
+    HashMap<String, Boolean> finalState = new HashMap<>();
+
     System.out.println("Welcome to Bogota, Mr. Thomas Anderson.");
     if (arg.length != 0) {
       regEx = arg[0];
@@ -45,7 +49,7 @@ class RegEx {
       try {
         ret = parse();
         System.out.println("  >> Tree result: " + ret.toString() + ".");
-
+        //le code est à inserer ici normalement
       } catch (Exception e) {
         System.err.println("  >> ERROR: syntax error for regEx \"" + regEx + "\".");
       }
@@ -54,8 +58,13 @@ class RegEx {
       char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
       transformer.displayMatrix(ndfa);
       // if(ndfa[5][3] == ' ') System.out.println("true");
-      HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa);
+      HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa, startState, finalState);
       transformer.afficherHashMap(dfa);
+      System.out.println("Afficher StartState");
+      transformer.afficherState(startState);
+      System.out.println("Afficher FinalState");
+      transformer.afficherState(finalState);
+
       // End of my own code
     }
 

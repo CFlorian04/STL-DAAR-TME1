@@ -3,11 +3,11 @@ public class Composer {
     Composer() {
     }
 
+    //à verifier
     char[][] concat(char[][] matrix1, char[][] matrix2) {
-        int rows = matrix1.length + matrix2.length -1;
-        int cols = matrix1[0].length + matrix2[0].length -1;
-        int lengthRow1 = matrix1.length;
-        int lengthCol1 = matrix1[0].length;
+        int rows = matrix1.length + matrix2.length;
+        int cols = matrix1[0].length + matrix2[0].length;
+        int length1 = matrix1.length;
         char[][] result = new char[rows][cols];
 
         // concat process
@@ -20,16 +20,16 @@ public class Composer {
             System.arraycopy(matrix1[i], 0, result[i], 0, matrix1[i].length);
         }
 
-        result[lengthRow1 - 1][lengthCol1] = ' ';
-        for (int i = 0; i < matrix2.length; i++) {
-            for (int j = 1; j < matrix2[0].length; j++) {
-                result[i + lengthRow1-1][j + lengthCol1-1] = matrix2[i][j];
-            }
-        }
         // for (int i = 0; i < matrix2.length; i++) {
-        //     // Copier chaque ligne de matrix2 dans result à la position décalée
-        //     System.arraycopy(matrix2[i], 0, result[i + lengthRow1], lengthCol1, matrix2[i].length);
+        //     for (int j = 0; j < matrix2[0].length; j++) {
+        //         result[i + length1][j + length1] = matrix2[i][j];
+        //     }
         // }
+        for (int i = 0; i < matrix2.length; i++) {
+            // Copier chaque ligne de matrix2 dans result à la position décalée
+            System.arraycopy(matrix2[i], 0, result[i + length1], length1, matrix2[i].length);
+        }
+        result[length1 - 1][length1] = ' ';
 
         return result;
     }

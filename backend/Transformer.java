@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 public class Transformer {
 
@@ -157,18 +159,6 @@ public class Transformer {
                                 //index=j; // a mediter
                             }
                         }
-
-
-
-
-
-                        //il faut bien definir l'etat final 
-
-
-                        if (visited.contains(acceptedState)){
-                            finalState.put(currentState, true);
-                            isFinalStateSet = true;
-                        }
                     }
                     if (!visited.isEmpty()){
                         result = new StringBuilder();
@@ -183,10 +173,19 @@ public class Transformer {
                             departState.add(result.toString()); // il faut qu'a un moment donnée, on n'ajoute plus
                         }
                     }
+                    
+                    // Conversion de currentState en tableau de chaînes
+                    String[] statesArray = currentState.split(",");
 
-                    if (!isFinalStateSet) {
+                    // Création d'un Set pour éviter les problèmes de sous-chaînes
+                    Set<String> statesSet = new HashSet<>(Arrays.asList(statesArray));
+
+                    // Vérification si acceptedState est dans le Set
+                    if (statesSet.contains(String.valueOf(acceptedState))) {
+                        finalState.put(currentState, true);
+                    } else {
                         finalState.put(currentState, false);
-                    }
+            }
                     
                     if (!currentState.equals(start)){
                         startState.put(currentState, false);

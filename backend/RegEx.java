@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.lang.Exception;
 
 class RegEx {
   // MACROS
@@ -70,13 +69,15 @@ class RegEx {
       System.out.println("Afficher FinalState");
       transformer.afficherState(finalState);
 
+      System.out.println("parcours DFA");
+      
               // // Instanciation de la classe DFA
-              // DFA monDFA = new DFA(dfa, startState, finalState);
+              DFA monDFA = new DFA(dfa, startState, finalState);
 
 
               // // Vérification des lignes dans un fichier texte
-              // String file = "./backend/examples/41011-0.txt"; // Remplacez par le nom de votre fichier
-              // monDFA.verifierTexte(file);
+              String file = "./backend/examples/41011-0.txt"; // Remplacez par le nom de votre fichier
+              monDFA.verifierTexte(file);
 
       // End of my own code
     }

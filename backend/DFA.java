@@ -18,11 +18,11 @@ public class DFA {
         this.finalState = finalState;
     }
 
-    // Vérifie une ligne à l'aide du DFA
-    public boolean verifierLigne(String ligne) {
+    // Vérifie une sous-chaîne de la ligne à partir d'une position donnée
+    public boolean verifierSousChaine(String ligne, int startPos) {
         // Commencer à l'état initial
         String currentState = null;
-
+        
         // Trouver l'état initial (dans startState où la valeur est true)
         for (Map.Entry<String, Boolean> entry : startState.entrySet()) {
             if (entry.getValue()) {
@@ -32,32 +32,51 @@ public class DFA {
         }
 
         if (currentState == null) {
-            System.out.println("Aucun état de départ trouvé.");
+            // Aucun état de départ trouvé
             return false;
         }
 
-        // Parcourir la ligne
-        for (char symbole : ligne.toCharArray()) {
+        // Parcourir la sous-chaîne à partir de startPos
+        for (int i = startPos; i < ligne.length(); i++) {
+            char symbole = ligne.charAt(i);
+
             // Récupérer les transitions pour l'état courant
             HashMap<String, String> transitions = dfa.get(currentState);
 
             if (transitions == null) {
-                System.out.println("Pas de transition disponible pour l'état: " + currentState);
-                return false; // Aucun état trouvé pour ce symbole
+                // Aucun état trouvé pour ce symbole
+                return false; 
             }
 
             // Trouver la transition pour le symbole actuel
             String symboleString = Character.toString(symbole);
             if (transitions.containsKey(symboleString)) {
                 currentState = transitions.get(symboleString); // Aller à l'état suivant
+            } else if (transitions.containsKey(".")) {
+                currentState = transitions.get("."); // Accepter n'importe quel caractère avec "."
             } else {
-                System.out.println("Pas de transition pour le symbole: " + symboleString);
-                return false; // Pas de transition pour ce symbole
+                // Pas de transition pour ce symbole, rejet de la sous-chaîne
+                return false;
+            }
+
+            // Si on atteint un état final, retourner vrai
+            if (finalState.getOrDefault(currentState, false)) {
+                return true;
             }
         }
 
-        // Vérifier si l'état final est dans finalState et marqué comme true
+        // Vérifier si l'état final est atteint après avoir parcouru la sous-chaîne
         return finalState.getOrDefault(currentState, false);
+    }
+
+    // Vérifie une ligne à l'aide du DFA pour chaque sous-chaîne possible
+    public boolean verifierLigne(String ligne) {
+        for (int i = 0; i < ligne.length(); i++) {
+            if (verifierSousChaine(ligne, i)) {
+                return true; // Si une sous-chaîne est acceptée, on retourne vrai
+            }
+        }
+        return false; // Si aucune sous-chaîne n'est acceptée, on retourne faux
     }
 
     // Vérifie toutes les lignes d'un fichier
@@ -68,7 +87,7 @@ public class DFA {
             while ((ligne = br.readLine()) != null) {
                 lineNumber++; // Incrémenter le numéro de ligne
                 if (verifierLigne(ligne)) {
-                    System.out.println("Ligne " + lineNumber + "  " + ligne);
+                    System.out.println("Ligne " + lineNumber + " : " + ligne);
                 }
             }
         } catch (IOException e) {

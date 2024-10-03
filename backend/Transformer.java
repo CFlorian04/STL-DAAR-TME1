@@ -17,7 +17,7 @@ public class Transformer {
         epsilon = p_epsilon;
     }
 
-    // Transformer l'arbre regex en NDFA avec un tableau de char[][]
+    // Transform the regex tree into NDFA using a char[][] array
     char[][] transformRegExTreeToNDFA(String regexTree) {
 
         Composer composer = new Composer(epsilon);
@@ -25,13 +25,12 @@ public class Transformer {
         String gauche = null;
         int len = regexTree.length();
 
-        if ((root == '|' || root == '.') && len > 1) { //il faut aussi faire fonctionner avec (ab|cd)* et a.*
-            // Trouver les indices des parenthèses et de la virgule
-            // System.out.println("Dans | ou . " + regexTree);
-            regexTree = regexTree.substring(2, len - 1); //retirer le parenthese à la fin
+        if ((root == '|' || root == '.') && len > 1) {
+
+            regexTree = regexTree.substring(2, len - 1); // Remove the parenthesis at the end
             
             int indexParentheseOuvrante = regexTree.indexOf('(');
-            int indexVirgule = regexTree.indexOf(','); //écraser s'il y a plusieurs virgules
+            int indexVirgule = regexTree.indexOf(','); // Overwrite if there are multiple commas
             boolean leftIsSet = false;
             if (!regexTree.substring(0, indexVirgule).contains("(")){
                 gauche = regexTree.substring(0,1);
@@ -52,43 +51,31 @@ public class Transformer {
                     }
                 }
             }
-
-            // Extraire la partie gauche (entre '(' et ',')joy
             if (!leftIsSet){
                 gauche = regexTree.substring(0, indexVirgule);
-                // System.out.println("gauche: "+ gauche);
             }
-            // Extraire la partie droite (entre ',' et le dernier ')')
             String droite = regexTree.substring(indexVirgule+1, regexTree.length());
             
             if (root == '|') {
-                // System.out.println("Je suis rentré par '|' gauche: " + gauche + " droite: " + droite);
                 return composer.altern(transformRegExTreeToNDFA(gauche), transformRegExTreeToNDFA(droite));
             } else if (root == '.') {
-                // System.out.println("Je suis rentré par '.' gauche: " + gauche + " droite: " + droite);
                 return composer.concat(transformRegExTreeToNDFA(gauche), transformRegExTreeToNDFA(droite));
             }
         }
-        // Check if there is an asterisk in the regexTree
-        // int indexOfAsterisk = regexTree.indexOf('*');
-        // System.out.println("indice" + root);// Étape 3 : Trouver la dernière parenthèse fermante
-                                                       // correspondante
         if (root == '*') {
             len = regexTree.length();
             regexTree = regexTree.substring(2, len - 1);
-            // System.out.println("Dans *");
-            // System.out.println("Dedans "+ regexTree);
             return composer.star(transformRegExTreeToNDFA(regexTree));
         }
         return transformLetterToCharArray(root);
     }
 
-    // Transformer le NDFA en DFA avec un tableau de char[][]
+    // Transform the NDFA into DFA
     HashMap<String, HashMap<String, String>> transformNDFAToDFA(char[][] ndfa, HashMap<String, Boolean> startState, HashMap<String, Boolean> finalState) {
 
         HashMap<String, HashMap<String, String>> dfa = new HashMap<>();
         Queue<Integer> successorList;
-        HashSet<Integer> visited; //   rapide et indice unique
+        HashSet<Integer> visited; //  // Fast and unique index
         List<Character> letters = extractKeys(ndfa); //letters are the HashMap's keys 
         boolean letterFound;
         boolean beginToSearch;
@@ -97,9 +84,9 @@ public class Transformer {
         //findFinal State
         int acceptedState = findFinalStates(ndfa);
         System.out.println("Etats d'acceptation : "+ acceptedState);
-        //Trouver les etats de depart
+        // Find the start states
         Queue<String> departState = new LinkedList<>();
-        StringBuilder state = new StringBuilder(); //Trouver les etats du depart 
+        StringBuilder state = new StringBuilder(); // Find the start stat
         visited = new HashSet<>();
         successorList = new LinkedList<>();
         successorList.add(0);
@@ -108,7 +95,7 @@ public class Transformer {
             visited.add(indice);
             for (int j = 0; j < ndfa.length; j++) {
                 if(ndfa[indice][j]==epsilon) {
-                    if (!visited.contains(j)) { //si j n'est pas dans la liste de successeur, on l'ajoute
+                    if (!visited.contains(j)) { // If j is not in the successor list, add it
                         successorList.add(j);
                         visited.add(j);
                     }
@@ -116,15 +103,15 @@ public class Transformer {
             }
         }
 
-        // Convertir chaque entier en String et ajouter
+        // Convert each integer to String and add it
         for (Integer elem : visited) {
             if (state.length() > 0) {
-                state.append(","); // Ajouter une virgule avant chaque élément, sauf le premier
+                state.append(","); // Add a comma before each element, except the first
             }
             state.append(elem.toString());
         }
         String start = state.toString();
-        departState.add(start);// séparer les indices des states par des virgules.
+        departState.add(start);// Separate the indices of the states by commas.
         startState.put(start, true);
 
         // construction de la Dfa
@@ -135,28 +122,25 @@ public class Transformer {
             for (char letter : letters) {
                 String[] elements = currentState.split(",");
                 for (String element : elements) {
-                    int index = Integer.parseInt(element.trim()); // Convertit le String en entier
-                    // System.out.println("lettre apres while :"+letter);
+                    int index = Integer.parseInt(element.trim()); // Convert the String to an integer
                     successorList = new LinkedList<>();
                     visited = new HashSet<>();
                     letterFound = false;
-                    //!!!Il faut que la lettre à rechercher soit les keys parcourues une à une; à chaque lettre ses visited state
                     beginToSearch = true;
                     while (!successorList.isEmpty() || beginToSearch) { 
                         if (!beginToSearch) {
                             index = successorList.poll();
                         } 
                         beginToSearch = false;
-                        for (int j = 0; j < ndfa[index].length; j++) { // parcourir les colonnes de ndfa
-                            //si on trouve des lettres autres que ' ' et \u0000, on trouve ses successeurs si le chemin € existe
+                        for (int j = 0; j < ndfa[index].length; j++) { // Traverse the columns of ndfa
+                            // If we find letters other than ' ' and \u0000, we find its successors if the path € exists
                             if ((ndfa[index][j] == letter) || (letterFound && ndfa[index][j] == epsilon)) {
-                                //si on trouve une lettre, on stock dans une liste les indices des successeurs à visiter
+                                // If we find a letter, we store the indices of the successors to visit in a list
                                 letterFound = true;
-                                if (!visited.contains(j)) { //si j n'est pas dans la liste de successeur, on l'ajoute
+                                if (!visited.contains(j)) { // If j is not in the successor list, add it
                                     successorList.add(j);
                                     visited.add(j);
                                 }
-                                //index=j; // a mediter
                             }
                         }
                     }
@@ -164,23 +148,23 @@ public class Transformer {
                         result = new StringBuilder();
                         for (Integer elem : visited) {
                             if (result.length() > 0) {
-                                result.append(","); // Ajouter une virgule avant chaque élément, sauf le premier
+                                result.append(","); // Add a comma before each element, except the first
                             }
                             result.append(elem.toString());
                         }
-                        dfa.get(currentState).put(""+letter, result.toString()); // a verifier
-                        if (!result.toString().equals(currentState)) { // ne pas avoir une redondance dans le current state
-                            departState.add(result.toString()); // il faut qu'a un moment donnée, on n'ajoute plus
+                        dfa.get(currentState).put(""+letter, result.toString()); 
+                        if (!result.toString().equals(currentState)) { // Avoid redundancy in the current state
+                            departState.add(result.toString()); // At some point, we need to stop adding
                         }
                     }
                     
-                    // Conversion de currentState en tableau de chaînes
+                    // Convert currentState to an array of strings
                     String[] statesArray = currentState.split(",");
 
-                    // Création d'un Set pour éviter les problèmes de sous-chaînes
+                    // Create a Set to avoid substring issues
                     Set<String> statesSet = new HashSet<>(Arrays.asList(statesArray));
 
-                    // Vérification si acceptedState est dans le Set
+                    // Check if acceptedState is in the Set
                     if (statesSet.contains(String.valueOf(acceptedState))) {
                         finalState.put(currentState, true);
                     } else {
@@ -201,7 +185,7 @@ public class Transformer {
         HashSet<Character> letters = new HashSet<>();
         for (char[] row : ndfa) {
             for (char c : row) {
-                if (c != epsilon && c != empty_char) { // Ignorer les transitions vides ou invalides
+                if (c != epsilon && c != empty_char) { // Ignore empty or invalid transitions
                     letters.add(c);
                     System.out.println("key:"+c);
                 }
@@ -210,18 +194,19 @@ public class Transformer {
         return new ArrayList<>(letters);
     }
 
-    // Méthode pour créer un HashMap avec les clés réutilisables
-    public static HashMap<String, String> createMapWithKeys(List<Character> keys) {
+    /// Method to create a HashMap with reusable keys
+    HashMap<String, String> createMapWithKeys(List<Character> keys) {
         HashMap<String, String> map = new HashMap<>();
 
-        // Initialiser chaque clé avec une valeur par défaut (ou autre logique)
+        // Initialize each key with a default value
         for (Character key : keys) {
-            map.put(key.toString(), ""); // Valeur par défaut
+            map.put(key.toString(), ""); // Default value
         }
         
         return map;
     }
 
+    // Minimize DFA
     public HashMap<String, HashMap<String, String>> minimizeDFA(HashMap<String, HashMap<String, String>> dfa, 
                                                                        HashMap<String, Boolean> startState, 
                                                                        HashMap<String, Boolean> finalState) {

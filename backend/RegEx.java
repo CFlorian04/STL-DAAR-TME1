@@ -71,13 +71,15 @@ class RegEx {
 
       System.out.println("parcours DFA");
       
-              // // Instanciation de la classe DFA
-              DFA monDFA = new DFA(dfa, startState, finalState);
+      // DFA Optimization 
+      dfa = transformer.minimizeDFA(dfa, startState, finalState);
 
+      // Instanciation de la classe DFA
+      DFA monDFA = new DFA(dfa, startState, finalState);
 
-              // // Vérification des lignes dans un fichier texte
-              String file = "./backend/examples/41011-0.txt"; // Remplacez par le nom de votre fichier
-              monDFA.verifierTexte(file);
+      // Vérification des lignes dans un fichier texte
+      String file = "./backend/examples/41011-0.txt";
+      monDFA.verifierTexte(file);
 
       // End of my own code
     }

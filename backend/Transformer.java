@@ -352,7 +352,7 @@ public class Transformer {
 
         return minimizedDFA;
     }
-
+    
     // Transformer une lettre en tableau de char[][]
     char[][] transformLetterToCharArray(char letter) {
         char[][] array = new char[4][4];

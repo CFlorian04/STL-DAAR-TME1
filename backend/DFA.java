@@ -94,4 +94,4 @@ public class DFA {
             System.err.println("Erreur de lecture du fichier: " + e.getMessage());
         }
     }
-}
+}   

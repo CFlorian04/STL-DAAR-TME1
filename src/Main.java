@@ -11,15 +11,16 @@ public class Main {
         // Programme principal
 
         String algo = null;
-        
-        if ((args.length >= 1) && (args[0].contains("*") || args[0].contains("|") || args[0].contains(".") || args[0].contains(")") || args[0].contains(")"))){
-            RegEx.LunchReGex(args);
-        } 
-        if (args.length == 3) {
-            algo = args[2];
-            choseMethod(args, algo);
+        if ((args.length >= 1)){
+            if (args[0].contains("*") || args[0].contains("|") || args[0].contains(".") || args[0].contains(")") || args[0].contains(")")){
+                RegEx.LunchReGex(args);
+            } else if (args.length == 3) {
+                algo = args[2];
+                choseMethod(args, algo);
+            } 
         }
-        if (args.length < 1) {
+
+        if (args.length < 1 || args.length == 2) {
             System.out.println("Choisir la methode a utiliser (KMP ou Automate)");
             Scanner sc = new Scanner(System.in);
             algo = sc.nextLine();

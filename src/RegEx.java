@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-class RegEx {
+public class RegEx {
   // MACROS
   static final int CONCAT = 0xC04CA7;
   static final int ETOILE = 0xE7011E;
@@ -24,69 +24,78 @@ class RegEx {
   }
 
   // MAIN
-  public static void main(String arg[]) {
+  public static void LunchReGex(String arg[]) {
 
     HashMap<String, Boolean> startState = new HashMap<>();
     HashMap<String, Boolean> finalState = new HashMap<>();
-
-    System.out.println("Welcome to Bogota, Mr. Thomas Anderson.");
+    
+    // System.out.println("Welcome to Bogota, Mr. Thomas Anderson.");
     if (arg.length != 0) {
       regEx = arg[0];
     } else {
-      Scanner scanner = new Scanner(System.in);
-
-      System.out.print("  >> Please enter a regEx: ");
-      regEx = scanner.next();
-      scanner.close();
+      Scanner s = new Scanner(System.in);
+      System.out.println("  >> Inserer l'expression reguliere : ");
+      regEx = s.next();  // Lire l'expression régulière
     }
-    System.out.println("  >> Parsing regEx \"" + regEx + "\".");
-    System.out.println("  >> ...");
+    // System.out.println("  >> Parsing regEx \"" + regEx + "\".");
+    // System.out.println("  >> ...");
 
     if (regEx.length() < 1) {
-      System.err.println("  >> ERROR: empty regEx.");
+      System.err.println("  >> ERREUR: L'expression reguliere est vide.");
     } else {
-      System.out.print("  >> ASCII codes: [" + (int) regEx.charAt(0));
+      System.out.print("  >> Code ASCII: [" + (int) regEx.charAt(0));
       for (int i = 1; i < regEx.length(); i++)
         System.out.print("," + (int) regEx.charAt(i));
       System.out.println("].");
       RegExTree ret = null;
       try {
         ret = parse();
-        System.out.println("  >> Tree result: " + ret.toString() + ".");
+        System.out.println("  >> Arbre syntaxique: " + ret.toString() + ".");
         //le code est à inserer ici normalement
+        // My own code
+        Transformer transformer = new Transformer(empty_char, epsilon);
+        char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
+        transformer.displayMatrix(ndfa);
+        // if(ndfa[5][3] == ' ') System.out.println("true");
+        HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa, startState, finalState);
+        dfa = transformer.minimizeDFA(dfa, startState, finalState);
+
+        transformer.afficherHashMap(dfa);
+
+        System.out.println("Afficher les etats de depart");
+        transformer.afficherState(startState);
+        System.out.println("Afficher les etats finaux");
+        transformer.afficherState(finalState);
+  
+        // System.out.println("parcours DFA");
+        
+        // DFA Optimization 
+  
+        // Instanciation de la classe DFA
+        DFA monDFA = new DFA(dfa, startState, finalState);
+  
+        String file = null;
+        if ((arg.length >= 2) && (arg[1] != null || arg[1] != "") ) {
+          file = arg[1];
+        } else {
+          while (file == null) {
+            System.out.println("Indiquer le chemin du fichier .txt:");
+            Scanner sc = new Scanner(System.in);
+            file = sc.next();
+            sc.close();
+          }
+          // file = "./src/examples/41011-0.txt";
+        }
+        // Vérification des lignes dans un fichier texte
+        monDFA.verifierTexte(file);
+  
+        // End of my own code
       } catch (Exception e) {
-        System.err.println("  >> ERROR: syntax error for regEx \"" + regEx + "\".");
+        System.err.println("  >> ERREUR: L'expression reguliere est invalide \"" + regEx + "\".");
       }
-      // My own code
-      Transformer transformer = new Transformer(empty_char, epsilon);
-      char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
-      transformer.displayMatrix(ndfa);
-      // if(ndfa[5][3] == ' ') System.out.println("true");
-      HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa, startState, finalState);
-      transformer.afficherHashMap(dfa);
-      System.out.println("Afficher StartState");
-      transformer.afficherState(startState);
-      System.out.println("Afficher FinalState");
-      transformer.afficherState(finalState);
-
-      System.out.println("parcours DFA");
-      
-      // DFA Optimization 
-      dfa = transformer.minimizeDFA(dfa, startState, finalState);
-
-      // Instanciation de la classe DFA
-      DFA monDFA = new DFA(dfa, startState, finalState);
-
-      // Vérification des lignes dans un fichier texte
-      String file = "./backend/examples/41011-0.txt";
-      monDFA.verifierTexte(file);
-
-      // End of my own code
     }
 
     System.out.println("  >> ...");
-    System.out.println("  >> Parsing completed.");
-    System.out.println("Goodbye Mr. Anderson.");
   }
 
   // FROM REGEX TO SYNTAX TREE

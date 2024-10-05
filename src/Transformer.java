@@ -364,6 +364,7 @@ public class Transformer {
 
     // Afficher la matrice
     void displayMatrix(char[][] matrice) {
+        System.out.println("Matrice AFND");
         for (char[] ligne : matrice) {
             for (char caractere : ligne) {
                 if (caractere == ' ') {

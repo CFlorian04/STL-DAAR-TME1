@@ -6,7 +6,7 @@ public class Tests {
 
     private static float pourcentage_exclu = (float) 0.05;
 
-    public static void main(String[] args) {
+    public static void LunchTest(String[] args) {
 
         int repetitions = 10000;
         String fichier = "./backend/examples/41011-0.txt";

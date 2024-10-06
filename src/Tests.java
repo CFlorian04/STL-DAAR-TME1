@@ -12,7 +12,6 @@ public class Tests {
 
         int repetitions = 10000;
         String fichier = "./backend/examples/41011-0.txt";
-        String motif = "Chihuahua";
 
         String[] motifs = {
                 // Motifs courts présents dans le texte
@@ -37,7 +36,7 @@ public class Tests {
         };
 
         test_KMP(motifs, fichier, false, repetitions);
-        test_Automate(motifs, fichier, true, repetitions);
+        //test_Automate(motifs, fichier, true, repetitions);
     }
     
 
@@ -80,7 +79,7 @@ public class Tests {
         int maxLength = get_motifs_max_length(motifs);
 
         for (int i = 0; i < motifs.length; i++) {
-            float l_time[] = KMPCalculerStatistiquesTemps(motifs[i], fichier, false, repetitions);
+            float l_time[] = AutomateCalculerStatistiquesTemps(motifs[i], fichier, false, repetitions);
             times[i] = l_time;
             
             if (showLog) {

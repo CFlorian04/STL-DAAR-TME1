@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.6.1)  5 OCT 2024 02:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.6.1)  6 OCT 2024 19:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"f:/Projet_devoir_M2/Daar-tme/Rapport M2 DAAR/egrep.tex"
-(f:/Projet_devoir_M2/Daar-tme/Rapport M2 DAAR/egrep.tex
+**"f:/Projet_devoir_M2/Daar-tme/DAAR-STL-TME/STL-DAAR-TME1/Rapport M2 DAAR/egrep.tex"
+(f:/Projet_devoir_M2/Daar-tme/DAAR-STL-TME/STL-DAAR-TME1/Rapport M2 DAAR/egrep.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-05-08>
 (C:\Users\JERRY ALEX\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -268,52 +268,60 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 <resourse/NDFA_a.png, id=9, 268.00125pt x 41.15375pt>
 File: resourse/NDFA_a.png Graphic file (type png)
 <use resourse/NDFA_a.png>
-Package pdftex.def Info: resourse/NDFA_a.png  used on input line 80.
+Package pdftex.def Info: resourse/NDFA_a.png  used on input line 82.
 (pdftex.def)             Requested size: 136.57462pt x 20.9718pt.
 <resourse/NDFA_a.tab.png, id=11, 161.60374pt x 131.49126pt>
 File: resourse/NDFA_a.tab.png Graphic file (type png)
 <use resourse/NDFA_a.tab.png>
-Package pdftex.def Info: resourse/NDFA_a.tab.png  used on input line 88.
+Package pdftex.def Info: resourse/NDFA_a.tab.png  used on input line 90.
 (pdftex.def)             Requested size: 113.81102pt x 92.60301pt.
- [1 <./resourse/NDFA_a.png> <./resourse/NDFA_a.tab.png>]
-<resourse/NDFA_b.png, id=18, 269.005pt x 41.15375pt>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[1]
+<resourse/NDFA_b.png, id=16, 269.005pt x 41.15375pt>
 File: resourse/NDFA_b.png Graphic file (type png)
 <use resourse/NDFA_b.png>
-Package pdftex.def Info: resourse/NDFA_b.png  used on input line 99.
+Package pdftex.def Info: resourse/NDFA_b.png  used on input line 101.
 (pdftex.def)             Requested size: 136.57462pt x 20.89394pt.
-<resourse/NDFA_b.tab.png, id=19, 161.60374pt x 131.49126pt>
+<resourse/NDFA_b.tab.png, id=17, 161.60374pt x 131.49126pt>
 File: resourse/NDFA_b.tab.png Graphic file (type png)
 <use resourse/NDFA_b.tab.png>
-Package pdftex.def Info: resourse/NDFA_b.tab.png  used on input line 107.
+Package pdftex.def Info: resourse/NDFA_b.tab.png  used on input line 109.
 (pdftex.def)             Requested size: 113.81102pt x 92.60301pt.
-<./resourse/NDFA_ab.png, id=20, 360.34625pt x 104.39pt>
+<./resourse/NDFA_ab.png, id=18, 360.34625pt x 104.39pt>
 File: ./resourse/NDFA_ab.png Graphic file (type png)
 <use ./resourse/NDFA_ab.png>
-Package pdftex.def Info: ./resourse/NDFA_ab.png  used on input line 118.
+Package pdftex.def Info: ./resourse/NDFA_ab.png  used on input line 120.
 (pdftex.def)             Requested size: 204.85846pt x 59.3452pt.
-<./resourse/NDFA_ab.tab.png, id=21, 296.10625pt x 273.02pt>
+<./resourse/NDFA_ab.tab.png, id=19, 296.10625pt x 273.02pt>
 File: ./resourse/NDFA_ab.tab.png Graphic file (type png)
 <use ./resourse/NDFA_ab.tab.png>
-Package pdftex.def Info: ./resourse/NDFA_ab.tab.png  used on input line 129.
+Package pdftex.def Info: ./resourse/NDFA_ab.tab.png  used on input line 131.
 (pdftex.def)             Requested size: 172.99498pt x 159.50984pt.
- [2 <./resourse/NDFA_b.png> <./resourse/NDFA_b.tab.png> <./resourse/NDFA_ab.png> <./resourse/NDFA_ab.tab.png>] [3] [4] (egrep.bbl) [5] (egrep.aux)
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[2 <./resourse/NDFA_a.png> <./resourse/NDFA_a.tab.png> <./resourse/NDFA_b.png> <./resourse/NDFA_b.tab.png> <./resourse/NDFA_ab.png>] [3 <./resourse/NDFA_ab.tab.png>] [4] [5] [6] (egrep.bbl) [7] (egrep.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-05-08>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 5473 strings out of 474312
- 93285 string characters out of 5736890
- 1937907 words of memory out of 5000000
- 27887 multiletter control sequences out of 15000+600000
+ 5475 strings out of 474312
+ 93524 string characters out of 5736890
+ 1934907 words of memory out of 5000000
+ 27889 multiletter control sequences out of 15000+600000
  588439 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,8n,65p,577b,428s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb>
-Output written on egrep.pdf (6 pages, 78157 bytes).
+ 57i,8n,65p,1024b,428s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb>
+Output written on egrep.pdf (8 pages, 102119 bytes).
 PDF statistics:
- 52 PDF objects out of 1000 (max. 8388607)
+ 70 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

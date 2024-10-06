@@ -9,6 +9,15 @@ public class AlgorithmeKMP {
     // Mode de test pour ne pas afficher les résultats dans la console
     private static boolean showLog;
 
+    
+    AlgorithmeKMP() {
+        AlgorithmeKMP.showLog = false;
+    }
+
+    public AlgorithmeKMP(boolean showLog) {
+        AlgorithmeKMP.showLog = showLog;
+    }
+
     // Méthode principale pour rechercher un motif dans un texte
     private static boolean findPattern(String motif, String texte, int line_number, boolean showUnfound) {
         boolean found = false;
@@ -64,7 +73,7 @@ public class AlgorithmeKMP {
         return findPattern(motif, texte, 0, true);
     }
 
-    public static void lunchKMP(String[] args) {
+    public static void LaunchKMP(String[] args) {
         String motif = null;
         String filePath = null;
 
@@ -205,11 +214,4 @@ public class AlgorithmeKMP {
         getOccurencesInFile(motif, cheminFichier);
     }
 
-    AlgorithmeKMP() {
-        AlgorithmeKMP.showLog = true;
-    }
-
-    public AlgorithmeKMP(boolean showLog) {
-        AlgorithmeKMP.showLog = showLog;
-    }
 }

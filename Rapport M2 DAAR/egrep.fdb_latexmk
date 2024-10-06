@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex egrep"] 1728085182.42601 "egrep.aux" "egrep.bbl" "egrep" 1728085185.22172 0
+["bibtex egrep"] 1728231538.97812 "egrep.aux" "egrep.bbl" "egrep" 1728231541.07477 0
   "./references.bib" 1728033047 1168 a6c035670b51b814a2a36c3da08c2f5d ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/bibtex/bst/bibtex/unsrt.bst" 1291864736 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "egrep.aux" 1728085183 3281 d5abe550c09ddb9c5b0a423d8e2c2cf6 "pdflatex"
+  "egrep.aux" 1728231540 3483 47f9051c64b24a4510319318c098a95d "pdflatex"
   (generated)
   "egrep.bbl"
   "egrep.blg"
   (rewritten before read)
-["pdflatex"] 1728085182.9834 "f:/Projet_devoir_M2/Daar-tme/Rapport M2 DAAR/egrep.tex" "egrep.pdf" "egrep" 1728085185.22321 0
+["pdflatex"] 1728231539.3096 "f:/Projet_devoir_M2/Daar-tme/DAAR-STL-TME/STL-DAAR-TME1/Rapport M2 DAAR/egrep.tex" "egrep.pdf" "egrep" 1728231541.0761 0
   "C:/Users/JERRY ALEX/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1717415924 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/JERRY ALEX/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1717190791 24246367 6f054e2f363adf86218e67423b8e26a2 ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -18,6 +18,8 @@
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmrc8t.tfm" 1136761454 16648 7e91c60ebf91b9c60e16ef52b3070f9c ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecrm1000.tfm" 993062122 3148 7e594c8240c71e432203f65ab5f95a51 ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1247596667 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+  "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
+  "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1247596667 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb" 1136842548 44729 fea0975e20ec51c992338362f05f1146 ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb" 1136842548 46026 687528a208fbfc1f00832bb96cccebbb ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/fonts/vf/adobe/times/ptmb8t.vf" 1136761454 2340 df9c920cc5688ebbf16a93f45ce7bdd3 ""
@@ -57,10 +59,10 @@
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/tex/latex/titlesec/titlesec.sty" 1699094857 48766 0b93839be28e9744a24c45075c75b2e2 ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/JERRY ALEX/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
-  "egrep.aux" 1728085183 3281 d5abe550c09ddb9c5b0a423d8e2c2cf6 "pdflatex"
-  "egrep.bbl" 1728085182 879 daee95b57994eedcaebfafb7311d809a "bibtex egrep"
-  "egrep.tex" 1728085178 13173 8bfd52291ca8b577dca64225b73894c7 ""
-  "f:/Projet_devoir_M2/Daar-tme/Rapport M2 DAAR/egrep.tex" 1728085178 13173 8bfd52291ca8b577dca64225b73894c7 ""
+  "egrep.aux" 1728231540 3483 47f9051c64b24a4510319318c098a95d "pdflatex"
+  "egrep.bbl" 1728231539 879 daee95b57994eedcaebfafb7311d809a "bibtex egrep"
+  "egrep.tex" 1728231536 16631 44004080b5779b1040f32bf189237446 ""
+  "f:/Projet_devoir_M2/Daar-tme/DAAR-STL-TME/STL-DAAR-TME1/Rapport M2 DAAR/egrep.tex" 1728231536 16631 44004080b5779b1040f32bf189237446 ""
   "resourse/NDFA_a.png" 1727980088 10926 814742aa5719ebcecd72ac957163608f ""
   "resourse/NDFA_a.tab.png" 1727982113 31157 59cf9965036c77c7b3839f543f9c4f74 ""
   "resourse/NDFA_ab.png" 1727985332 23350 7110e4886302638e96cb05cdeb846c5c ""

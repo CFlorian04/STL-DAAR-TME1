@@ -3,15 +3,12 @@ import java.util.Arrays;
 
 public class Tests {
 
-    private static AlgorithmeKMP algorithmeKMP = new AlgorithmeKMP(false);
-    private static RegEx algorithmeAutomate = new RegEx();
-
     private static float pourcentage_exclu = (float) 0.05;
 
-    public static void LunchTest(String[] args) {
+    public static void LaunchTest(String[] args) {
 
-        int repetitions = 10000;
-        String fichier = "./backend/examples/41011-0.txt";
+        int repetitions = 1000;
+        String fichier = "./src/examples/41011-0.txt";
 
         String[] motifs = {
                 // Motifs courts présents dans le texte
@@ -35,8 +32,20 @@ public class Tests {
                 "Hooick"
         };
 
-        test_KMP(motifs, fichier, false, repetitions);
-        //test_Automate(motifs, fichier, true, repetitions);
+        String[] motifs_regex = {
+            "a|bc*",
+            "th(e|is)",
+            "ex.*ple",
+            "\"[^\"]+\"",  // Texte entre guillemets (ex : citations)
+            "t.*t"
+        };
+        
+
+        test_KMP(motifs, fichier, true, repetitions);
+        System.out.println();
+        test_Automate(motifs, fichier, true, repetitions);
+        System.out.println();
+        test_Automate(motifs_regex, fichier, true, repetitions);
     }
     
 
@@ -56,13 +65,13 @@ public class Tests {
         int maxLength = get_motifs_max_length(motifs);
 
         for (int i = 0; i < motifs.length; i++) {
-            float l_time[] = KMPCalculerStatistiquesTemps(motifs[i], fichier, false, repetitions);
+            float l_time[] = KMPCalculerStatistiquesTemps(motifs[i], fichier, repetitions);
             times[i] = l_time;
             
             if (showLog) {
                 System.out.println(
                     "KMP |\t Motif : "
-                    + String.format("%" + String.valueOf(maxLength + 5) + "s",motifs[i] + " [" + algorithmeKMP.getOccurencesInFile(motifs[i], fichier)+ "]")
+                    + String.format("%" + String.valueOf(maxLength + 5) + "s",motifs[i]) //+ " [" + AlgorithmeKMP.getOccurencesInFile(motifs[i], fichier)+ "]")
                     + "  -> Min : " + l_time[0] + " ms"
                     + " \t| Max : " + l_time[1] + " ms"
                     + " \t| Moy : " + l_time[2] + " ms"
@@ -79,13 +88,13 @@ public class Tests {
         int maxLength = get_motifs_max_length(motifs);
 
         for (int i = 0; i < motifs.length; i++) {
-            float l_time[] = AutomateCalculerStatistiquesTemps(motifs[i], fichier, false, repetitions);
+            float l_time[] = AutomateCalculerStatistiquesTemps(motifs[i], fichier, repetitions);
             times[i] = l_time;
             
             if (showLog) {
                 System.out.println(
                     "Automate |\t Motif : "
-                    + String.format("%" + String.valueOf(maxLength + 5) + "s",motifs[i] + " [" + algorithmeKMP.getOccurencesInFile(motifs[i], fichier)+ "]")
+                    + String.format("%" + String.valueOf(maxLength + 5) + "s",motifs[i]) //+ " [" + new RegEx(motifs[i]).getOccurencesInFile(fichier)+ "]")
                     + "  -> Min : " + l_time[0] + " ms"
                     + " \t| Max : " + l_time[1] + " ms"
                     + " \t| Moy : " + l_time[2] + " ms"
@@ -98,12 +107,12 @@ public class Tests {
     }
 
 
-    private static float[] KMPCalculerStatistiquesTemps(String motif, String fichier, boolean showLog, int repetitions) {
+    private static float[] KMPCalculerStatistiquesTemps(String motif, String fichier, int repetitions) {
         float[] times = new float[repetitions];
 
         // Collecte des temps d'exécution
         for (int i = 0; i < repetitions; i++) {
-            times[i] = executionTime(() -> algorithmeKMP.findPatternInFile(motif, fichier));
+            times[i] = executionTime(() -> new AlgorithmeKMP(false).findPatternInFile(motif, fichier));
         }
 
         // Tri des temps
@@ -123,23 +132,15 @@ public class Tests {
         }
         moy = moy / (endIndex - startIndex);
 
-        if (showLog) {
-            System.out.println("Motif : " + motif + " [" + algorithmeKMP.getOccurencesInFile(motif, fichier)
-                    + "] -> Min : " + min
-                    + " ms | Max : " + max
-                    + " ms | Moy : " + moy
-                    + " ms");
-        }
-
         return new float[] { min, max, moy };
     }
 
-    private static float[] AutomateCalculerStatistiquesTemps(String motif, String fichier, boolean showLog, int repetitions) {
+    private static float[] AutomateCalculerStatistiquesTemps(String motif, String fichier, int repetitions) {
         float[] times = new float[repetitions];
 
         // Collecte des temps d'exécution
         for (int i = 0; i < repetitions; i++) {
-            times[i] = executionTime(() -> algorithmeAutomate.findPatternInFile(motif, fichier));
+            times[i] = executionTime(() -> new RegEx(false).findPatternInFile(motif, fichier));
         }
 
         // Tri des temps
@@ -159,14 +160,6 @@ public class Tests {
             moy += times[i];
         }
         moy = moy / (endIndex - startIndex);
-
-        if (showLog) {
-            System.out.println("Motif : " + motif
-                    + "] -> Min : " + min
-                    + " ms | Max : " + max
-                    + " ms | Moy : " + moy
-                    + " ms");
-        }
 
         return new float[] { min, max, moy };
     }

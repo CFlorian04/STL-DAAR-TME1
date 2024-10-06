@@ -19,13 +19,23 @@ public class RegEx {
 
   // REGEX
   private static String regEx;
+  private static boolean showLog;
 
   // CONSTRUCTOR
   public RegEx() {
+    this.showLog = false;
+  }
+
+  public RegEx(boolean showLog) {
+    this.showLog = showLog;
+  }
+
+  public RegEx(String regEx) {
+    this.regEx = regEx;
   }
 
   // MAIN
-  public static void LunchReGex(String arg[]) {
+  public static void LaunchRegEx(String arg[]) {
 
     // System.out.println("Welcome to Bogota, Mr. Thomas Anderson.");
     if (arg.length != 0) {
@@ -34,6 +44,7 @@ public class RegEx {
       Scanner s = new Scanner(System.in);
       System.out.println("  >> Inserer l'expression reguliere : ");
       regEx = s.next(); // Lire l'expression régulière
+      s.close();
     }
     // System.out.println(" >> Parsing regEx \"" + regEx + "\".");
     // System.out.println(" >> ...");
@@ -41,21 +52,20 @@ public class RegEx {
     if (regEx.length() < 1) {
       System.err.println("  >> ERREUR: L'expression reguliere est vide.");
     } else {
-      
 
-        String file = null;
-        if ((arg.length >= 2) && (arg[1] != null || arg[1] != "")) {
-          file = arg[1];
-        } else {
-          while (file == null) {
-            System.out.println("Indiquer le chemin du fichier .txt:");
-            Scanner sc = new Scanner(System.in);
-            file = sc.next();
-            sc.close();
-          }
+      String file = null;
+      if ((arg.length >= 2) && (arg[1] != null || arg[1] != "")) {
+        file = arg[1];
+      } else {
+        while (file == null) {
+          System.out.println("Indiquer le chemin du fichier .txt:");
+          Scanner sc = new Scanner(System.in);
+          file = sc.next();
+          sc.close();
         }
+      }
 
-        findPatternInFile(regEx,file);
+      findPatternInFile(regEx, file);
 
     }
 
@@ -64,55 +74,90 @@ public class RegEx {
 
   public static boolean findPatternInFile(String motif, String cheminFichier) {
 
+    regEx = motif;
+
     HashMap<String, Boolean> startState = new HashMap<>();
     HashMap<String, Boolean> finalState = new HashMap<>();
     boolean found = false;
 
-    System.out.print("  >> Code ASCII: [" + (int) regEx.charAt(0));
-    for (int i = 1; i < regEx.length(); i++) {
-      System.out.print("," + (int) regEx.charAt(i));
+    if (showLog) {
+      System.out.print("  >> Code ASCII: [" + (int) regEx.charAt(0));
+      for (int i = 1; i < regEx.length(); i++) {
+        System.out.print("," + (int) regEx.charAt(i));
+      }
+      System.out.println("].");
     }
-    System.out.println("].");
     RegExTree ret = null;
     try {
       ret = parse();
-      System.out.println("  >> Arbre syntaxique: " + ret.toString() + ".");
-      // le code est à inserer ici normalement
-      // My own code
-      Transformer transformer = new Transformer(empty_char, epsilon);
+      if (showLog) {
+        System.out.println("  >> Arbre syntaxique: " + ret.toString() + ".");
+      }
+
+      Transformer transformer = new Transformer(empty_char, epsilon, showLog);
       char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
-      transformer.displayMatrix(ndfa);
+      if (showLog) {
+        transformer.displayMatrix(ndfa);
+      }
       // if(ndfa[5][3] == ' ') System.out.println("true");
       HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa, startState, finalState);
       dfa = transformer.minimizeDFA(dfa, startState, finalState);
 
-      transformer.afficherHashMap(dfa);
-
-      System.out.println("Afficher les etats de depart");
-      transformer.afficherState(startState);
-      System.out.println("Afficher les etats finaux");
-      transformer.afficherState(finalState);
-
+      if (showLog) {
+        transformer.afficherHashMap(dfa);
+        System.out.println("Afficher les etats de depart");
+        transformer.afficherState(startState);
+        System.out.println("Afficher les etats finaux");
+        transformer.afficherState(finalState);
+      }
       // System.out.println("parcours DFA");
 
       // DFA Optimization
 
       // Instanciation de la classe DFA
-      DFA monDFA = new DFA(dfa, startState, finalState);
-      
+      DFA monDFA = new DFA(dfa, startState, finalState, showLog);
+
       boolean local_found = monDFA.verifierTexte(cheminFichier);
 
-      if(!found && local_found) {
+      if (!found && local_found) {
         found = true;
       }
 
     } catch (Exception e) {
-      System.err.println("  >> ERREUR: L'expression reguliere est invalide \"" + regEx + "\".");
+      if (showLog) {
+        System.err.println("  >> ERREUR: L'expression reguliere est invalide \"" + regEx + "\".");
+      }
     }
 
     return found;
-    
+
   }
+
+  public int getOccurencesInFile(String nomFichier) {
+
+    HashMap<String, Boolean> startState = new HashMap<>();
+    HashMap<String, Boolean> finalState = new HashMap<>();
+    int occurences = 0;
+
+    RegExTree ret = null;
+    try {
+      ret = parse();
+
+      Transformer transformer = new Transformer(empty_char, epsilon, showLog);
+      char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
+
+      HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa, startState, finalState);
+      dfa = transformer.minimizeDFA(dfa, startState, finalState);
+
+      DFA monDFA = new DFA(dfa, startState, finalState, showLog);
+
+      occurences = monDFA.getOccurencesInFile(nomFichier);
+
+    } catch (Exception e) {}
+
+  return occurences;
+}
+
   // FROM REGEX TO SYNTAX TREE
   private static RegExTree parse() throws Exception {
 
@@ -308,8 +353,8 @@ public class RegEx {
     return new RegExTree(tree.root, subTrees);
   }
 
-  // EXAMPLE
-  // --> RegEx from Aho-Ullman book Chap.10 Example 10.25
+  // EXAMPLE --> RegEx from Aho-Ullman book Chap.10 Example 10.25
+  @SuppressWarnings("unused")
   private static RegExTree exampleAhoUllman() {
     RegExTree a = new RegExTree((int) 'a', new ArrayList<RegExTree>());
     RegExTree b = new RegExTree((int) 'b', new ArrayList<RegExTree>());

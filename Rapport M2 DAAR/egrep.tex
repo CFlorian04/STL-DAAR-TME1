@@ -129,6 +129,7 @@ Cette étape consiste à remonter dans l'arbre tout en combinant les feuilles, e
 
 Pour la règle de concaténation ".", nous avons ajouté une nouvelle transition $\epsilon$ entre l'état 3 (ancien état d'acceptation de l'AFND gauche) et l'état 4 (état de départ de l'AFND droit).
 
+\newpage
 Le tableau suivant correspond à l'AFND du graphe \cite{ndfa_ab} :
 \begin{figure}[h] % Utilisation de l'option [h] pour placer l'image ici
     \centering
@@ -194,7 +195,7 @@ Pour la phase de test des algorithmes, nous mesurerons les temps d'exécution mi
 
 Pour l’automate, nous choisissons de faire deux tests. Le premier en utilisant des motifs RegEx et le deuxième en utilisant des motifs simples pour pouvoir les comparer avec l’algorithme Knuth-Morris-Pratt.
 
-Les motifs RegEx utilisés pour ces tests sont : \texttt{"a|bc*"}, \texttt{"th(e|is)"}, \texttt{"ex\.*ple"}, \texttt{"\"[\^  " ]+\""} et \texttt{"t\.*t"}.
+Les motifs RegEx utilisés pour ces tests sont : \texttt{"a|bc*"}, \texttt{"th(e|is)"}, \texttt{"ex.*ple"}, \texttt{"\"[\^  " ]+\""} et \texttt{"t.*t"}.
 
 \begin{figure}[ht] % Utilisation de l'option [h] pour placer l'image ici
     \centering
@@ -267,7 +268,7 @@ En revanche, KMP est conçu pour maintenir des performances stables avec des mot
 \subsubsection*{Stabilité des temps d'exécution}
 Un autre aspect important est la stabilité des deux algorithmes. Les variations entre les temps minimum et maximum sont nettement plus marquées pour l'automate, surtout avec des chaînes longues et complexes. Par exemple, pour \texttt{"in the heart of the jungle"}, l'automate présente des temps variant entre 23,3693 et 26,1084 ms, tandis que KMP oscille entre 1,8659 et 2,3912 ms. Cela montre que KMP est plus prévisible et constant dans ses temps d'exécution, alors que l'automate peut subir des fluctuations significatives selon les cas d'utilisation.
 
-\subsubsection{Conclusion}
+\subsubsection{Résumé}
 En résumé, l'algorithme KMP surpasse largement l'algorithme basé sur un automate en termes de rapidité et de stabilité, particulièrement pour les chaînes courtes ou simples. Bien que l'automate soit mieux adapté à la gestion de motifs complexes avec des expressions régulières, il souffre de performances nettement inférieures, notamment pour les chaînes plus longues. En conséquence, KMP s'avère être un choix plus approprié dans des contextes où la rapidité est essentielle et les motifs sont simples. En revanche, l'automate trouve son utilité dans des situations où les motifs sont plus complexes, bien que cela entraîne un coût en temps plus élevé.
 
 

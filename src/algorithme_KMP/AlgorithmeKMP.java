@@ -1,3 +1,4 @@
+package algorithme_KMP;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -108,7 +109,7 @@ public class AlgorithmeKMP {
         }
 
 
-        //implement here le code to call KMP Algo
+        findPatternInFile(motif, filePath);
     }
 
     // Nouvelle méthode pour chercher un motif dans un fichier texte
@@ -208,7 +209,7 @@ public class AlgorithmeKMP {
         AlgorithmeKMP.showLog = true;
     }
 
-    AlgorithmeKMP(boolean showLog) {
+    public AlgorithmeKMP(boolean showLog) {
         AlgorithmeKMP.showLog = showLog;
     }
 }

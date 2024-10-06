@@ -1,3 +1,4 @@
+package algorithme_automate;
 public class Composer {
 
     char empty_char, epsilon;

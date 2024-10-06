@@ -1,3 +1,4 @@
+package algorithme_automate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -26,56 +27,24 @@ public class RegEx {
   // MAIN
   public static void LunchReGex(String arg[]) {
 
-    HashMap<String, Boolean> startState = new HashMap<>();
-    HashMap<String, Boolean> finalState = new HashMap<>();
-    
     // System.out.println("Welcome to Bogota, Mr. Thomas Anderson.");
     if (arg.length != 0) {
       regEx = arg[0];
     } else {
       Scanner s = new Scanner(System.in);
       System.out.println("  >> Inserer l'expression reguliere : ");
-      regEx = s.next();  // Lire l'expression régulière
+      regEx = s.next(); // Lire l'expression régulière
     }
-    // System.out.println("  >> Parsing regEx \"" + regEx + "\".");
-    // System.out.println("  >> ...");
+    // System.out.println(" >> Parsing regEx \"" + regEx + "\".");
+    // System.out.println(" >> ...");
 
     if (regEx.length() < 1) {
       System.err.println("  >> ERREUR: L'expression reguliere est vide.");
     } else {
-      System.out.print("  >> Code ASCII: [" + (int) regEx.charAt(0));
-      for (int i = 1; i < regEx.length(); i++)
-        System.out.print("," + (int) regEx.charAt(i));
-      System.out.println("].");
-      RegExTree ret = null;
-      try {
-        ret = parse();
-        System.out.println("  >> Arbre syntaxique: " + ret.toString() + ".");
-        //le code est à inserer ici normalement
-        // My own code
-        Transformer transformer = new Transformer(empty_char, epsilon);
-        char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
-        transformer.displayMatrix(ndfa);
-        // if(ndfa[5][3] == ' ') System.out.println("true");
-        HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa, startState, finalState);
-        dfa = transformer.minimizeDFA(dfa, startState, finalState);
+      
 
-        transformer.afficherHashMap(dfa);
-
-        System.out.println("Afficher les etats de depart");
-        transformer.afficherState(startState);
-        System.out.println("Afficher les etats finaux");
-        transformer.afficherState(finalState);
-  
-        // System.out.println("parcours DFA");
-        
-        // DFA Optimization 
-  
-        // Instanciation de la classe DFA
-        DFA monDFA = new DFA(dfa, startState, finalState);
-  
         String file = null;
-        if ((arg.length >= 2) && (arg[1] != null || arg[1] != "") ) {
+        if ((arg.length >= 2) && (arg[1] != null || arg[1] != "")) {
           file = arg[1];
         } else {
           while (file == null) {
@@ -84,20 +53,66 @@ public class RegEx {
             file = sc.next();
             sc.close();
           }
-          // file = "./src/examples/41011-0.txt";
         }
-        // Vérification des lignes dans un fichier texte
-        monDFA.verifierTexte(file);
-  
-        // End of my own code
-      } catch (Exception e) {
-        System.err.println("  >> ERREUR: L'expression reguliere est invalide \"" + regEx + "\".");
-      }
+
+        findPatternInFile(regEx,file);
+
     }
 
     System.out.println("  >> ...");
   }
 
+  public static boolean findPatternInFile(String motif, String cheminFichier) {
+
+    HashMap<String, Boolean> startState = new HashMap<>();
+    HashMap<String, Boolean> finalState = new HashMap<>();
+    boolean found = false;
+
+    System.out.print("  >> Code ASCII: [" + (int) regEx.charAt(0));
+    for (int i = 1; i < regEx.length(); i++) {
+      System.out.print("," + (int) regEx.charAt(i));
+    }
+    System.out.println("].");
+    RegExTree ret = null;
+    try {
+      ret = parse();
+      System.out.println("  >> Arbre syntaxique: " + ret.toString() + ".");
+      // le code est à inserer ici normalement
+      // My own code
+      Transformer transformer = new Transformer(empty_char, epsilon);
+      char[][] ndfa = transformer.transformRegExTreeToNDFA(ret.toString());
+      transformer.displayMatrix(ndfa);
+      // if(ndfa[5][3] == ' ') System.out.println("true");
+      HashMap<String, HashMap<String, String>> dfa = transformer.transformNDFAToDFA(ndfa, startState, finalState);
+      dfa = transformer.minimizeDFA(dfa, startState, finalState);
+
+      transformer.afficherHashMap(dfa);
+
+      System.out.println("Afficher les etats de depart");
+      transformer.afficherState(startState);
+      System.out.println("Afficher les etats finaux");
+      transformer.afficherState(finalState);
+
+      // System.out.println("parcours DFA");
+
+      // DFA Optimization
+
+      // Instanciation de la classe DFA
+      DFA monDFA = new DFA(dfa, startState, finalState);
+      
+      boolean local_found = monDFA.verifierTexte(cheminFichier);
+
+      if(!found && local_found) {
+        found = true;
+      }
+
+    } catch (Exception e) {
+      System.err.println("  >> ERREUR: L'expression reguliere est invalide \"" + regEx + "\".");
+    }
+
+    return found;
+    
+  }
   // FROM REGEX TO SYNTAX TREE
   private static RegExTree parse() throws Exception {
 

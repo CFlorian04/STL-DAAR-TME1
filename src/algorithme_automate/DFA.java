@@ -1,3 +1,4 @@
+package algorithme_automate;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -80,7 +81,8 @@ public class DFA {
     }
 
     // Vérifie toutes les lignes d'un fichier
-    public void verifierTexte(String nomFichier) {
+    public boolean verifierTexte(String nomFichier) {
+        boolean found = false;
         try (BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
             String ligne;
             int lineNumber = 0; // Compteur pour le numéro de ligne
@@ -88,10 +90,14 @@ public class DFA {
                 lineNumber++; // Incrémenter le numéro de ligne
                 if (verifierLigne(ligne)) {
                     System.out.println("Ligne " + lineNumber + " : " + ligne);
+                    found = true;
                 }
             }
         } catch (IOException e) {
             System.err.println("Erreur de lecture du fichier: " + e.getMessage());
         }
+
+        return found;
     }
+
 }

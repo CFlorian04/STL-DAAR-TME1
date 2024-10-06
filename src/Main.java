@@ -1,11 +1,15 @@
 import java.util.Scanner;
 
+import algorithme_KMP.AlgorithmeKMP;
+import algorithme_automate.RegEx;
+import tests.Tests;
+
 public class Main {
     
     public static void main(String[] args) { // args[0] => pattern, args[1] => file, args[2] => method
 
         // Programme à lancer pour les tests
-        //Tests.LunchTest(args);
+        new Tests().LunchTest(args);
         // Fin programme test
 
         // Programme principal

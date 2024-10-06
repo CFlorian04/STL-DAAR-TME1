@@ -1,11 +1,22 @@
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class AlgorithmeKMP {
 
     // Mode de test pour ne pas afficher les résultats dans la console
     private static boolean showLog;
+
+    
+    AlgorithmeKMP() {
+        AlgorithmeKMP.showLog = false;
+    }
+
+    public AlgorithmeKMP(boolean showLog) {
+        AlgorithmeKMP.showLog = showLog;
+    }
 
     // Méthode principale pour rechercher un motif dans un texte
     private static boolean findPattern(String motif, String texte, int line_number, boolean showUnfound) {
@@ -60,6 +71,54 @@ public class AlgorithmeKMP {
 
     public static boolean findPatternInText(String motif, String texte) {
         return findPattern(motif, texte, 0, true);
+    }
+
+    public static void LaunchKMP(String[] args) {
+        String motif = null;
+        String filePath = null;
+
+        if (args.length >= 1) {
+            motif = args[0];
+        }
+        // Créez une seule instance de BufferedReader
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        // Lire le motif à partir de l'entrée utilisateur
+        while (motif == null || motif.isEmpty()) {
+            System.out.println(">> Inserer le motif : ");
+            try {
+                motif = reader.readLine();  // Lire la ligne entrée par l'utilisateur
+                
+                // Vérifier si le motif est vide
+                if (motif.isEmpty()) {
+                    System.out.println("Le motif ne peut pas être vide. Veuillez réessayer.");
+                }
+            } catch (IOException e) {
+                System.out.println("Erreur lors de la lecture de l'entrée utilisateur : " + e.getMessage());
+            }
+        }
+
+        // Vérifier les arguments de la ligne de commande
+        if (args.length >= 2) {
+            filePath = args[1];
+        }
+        // Demander le chemin du fichier si non fourni dans les arguments
+        while (filePath == null || filePath.isEmpty()) {
+            System.out.println("  >> Inserer le chemin du fichier : ");
+            try {
+                filePath = reader.readLine();  // Lire le chemin du fichier
+                
+                // Vérifier si le chemin est vide
+                if (filePath.isEmpty()) {
+                    System.out.println("Le chemin du fichier ne peut pas être vide. Veuillez réessayer.");
+                }
+            } catch (IOException e) {
+                System.out.println("Erreur lors de la lecture de l'entrée utilisateur : " + e.getMessage());
+            }
+        }
+
+
+        findPatternInFile(motif, filePath);
     }
 
     // Nouvelle méthode pour chercher un motif dans un fichier texte
@@ -151,15 +210,8 @@ public class AlgorithmeKMP {
         // String texte = "ABABDABACDABABCABAB";
         // findPattern(motif, texte);
 
-        String cheminFichier = "./backend/examples/41011-0.txt";
+        String cheminFichier = "./src/examples/41011-0.txt";
         getOccurencesInFile(motif, cheminFichier);
     }
 
-    AlgorithmeKMP() {
-        AlgorithmeKMP.showLog = true;
-    }
-
-    AlgorithmeKMP(boolean showLog) {
-        AlgorithmeKMP.showLog = showLog;
-    }
 }

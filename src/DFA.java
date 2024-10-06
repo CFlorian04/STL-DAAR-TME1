@@ -8,14 +8,17 @@ public class DFA {
     private HashMap<String, HashMap<String, String>> dfa;
     private HashMap<String, Boolean> startState;
     private HashMap<String, Boolean> finalState;
+    private boolean showLog;
 
     // Constructeur
     public DFA(HashMap<String, HashMap<String, String>> dfa, 
                HashMap<String, Boolean> startState, 
-               HashMap<String, Boolean> finalState) {
+               HashMap<String, Boolean> finalState,
+               boolean showLog) {
         this.dfa = dfa;
         this.startState = startState;
         this.finalState = finalState;
+        this.showLog = showLog;
     }
 
     // Vérifie une sous-chaîne de la ligne à partir d'une position donnée
@@ -80,18 +83,46 @@ public class DFA {
     }
 
     // Vérifie toutes les lignes d'un fichier
-    public void verifierTexte(String nomFichier) {
+    public boolean verifierTexte(String nomFichier) {
+        boolean found = false;
         try (BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
             String ligne;
             int lineNumber = 0; // Compteur pour le numéro de ligne
             while ((ligne = br.readLine()) != null) {
                 lineNumber++; // Incrémenter le numéro de ligne
                 if (verifierLigne(ligne)) {
-                    System.out.println("Ligne " + lineNumber + " : " + ligne);
+                    if (showLog) {
+                        System.out.println("Ligne " + lineNumber + " : " + ligne);
+                    }
+                    found = true;
                 }
             }
         } catch (IOException e) {
             System.err.println("Erreur de lecture du fichier: " + e.getMessage());
         }
+
+        return found;
     }
+
+    public int getOccurencesInFile(String nomFichier) {
+        int occurences = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
+            String ligne;
+            int lineNumber = 0; // Compteur pour le numéro de ligne
+            while ((ligne = br.readLine()) != null) {
+                lineNumber++; // Incrémenter le numéro de ligne
+                if (verifierLigne(ligne)) {
+                    if (showLog) {
+                        System.out.println("Ligne " + lineNumber + " : " + ligne);
+                    }
+                    occurences++;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erreur de lecture du fichier: " + e.getMessage());
+        }
+
+        return occurences;
+    }
+
 }

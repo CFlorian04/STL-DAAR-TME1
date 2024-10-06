@@ -11,10 +11,12 @@ import java.util.Set;
 public class Transformer {
 
     char empty_char, epsilon;
+    boolean showLog;
 
-    Transformer(char p_empty_char, char p_epsilon) {
+    Transformer(char p_empty_char, char p_epsilon, boolean showLog) {
         empty_char = p_empty_char;
         epsilon = p_epsilon;
+        this.showLog = showLog;
     }
 
     // Transform the regex tree into NDFA using a char[][] array
@@ -83,7 +85,9 @@ public class Transformer {
         StringBuilder result;
         //findFinal State
         int acceptedState = findFinalStates(ndfa);
-        System.out.println("Etats d'acceptation : "+ acceptedState);
+        if (showLog) {
+            System.out.println("Etats d'acceptation : "+ acceptedState);
+        }
         // Find the start states
         Queue<String> departState = new LinkedList<>();
         StringBuilder state = new StringBuilder(); // Find the start stat
@@ -117,12 +121,12 @@ public class Transformer {
         // construction de la Dfa
         while (!departState.isEmpty()) {
             currentState = departState.poll();
-            boolean isFinalStateSet = false;
+            //boolean isFinalStateSet = false;
             dfa.put(currentState, createMapWithKeys(letters));
             for (char letter : letters) {
                 String[] elements = currentState.split(",");
                 for (String element : elements) {
-                    int index = Integer.parseInt(element.trim()); // Convert the String to an integer
+                    int index = Integer.parseInt(element); // Convert the String to an integer
                     successorList = new LinkedList<>();
                     visited = new HashSet<>();
                     letterFound = false;
@@ -187,7 +191,9 @@ public class Transformer {
             for (char c : row) {
                 if (c != epsilon && c != empty_char) { // Ignore empty or invalid transitions
                     letters.add(c);
-                    System.out.println("key:"+c);
+                    if (showLog) {
+                        System.out.println("key:"+c);
+                    }
                 }
             }
         }
@@ -364,6 +370,7 @@ public class Transformer {
 
     // Afficher la matrice
     void displayMatrix(char[][] matrice) {
+        System.out.println("Matrice AFND");
         for (char[] ligne : matrice) {
             for (char caractere : ligne) {
                 if (caractere == ' ') {

@@ -85,7 +85,7 @@ public class AlgorithmeKMP {
 
         // Lire le motif à partir de l'entrée utilisateur
         while (motif == null || motif.isEmpty()) {
-            System.out.print(">> Inserer le motif : ");
+            System.out.println(">> Inserer le motif : ");
             try {
                 motif = reader.readLine();  // Lire la ligne entrée par l'utilisateur
                 
@@ -104,7 +104,7 @@ public class AlgorithmeKMP {
         }
         // Demander le chemin du fichier si non fourni dans les arguments
         while (filePath == null || filePath.isEmpty()) {
-            System.out.print("  >> Inserer le chemin du fichier : ");
+            System.out.println("  >> Inserer le chemin du fichier : ");
             try {
                 filePath = reader.readLine();  // Lire le chemin du fichier
                 

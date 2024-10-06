@@ -32,7 +32,7 @@ public class Main {
                 }
                 
                 if (args.length < 1 || args.length == 2) {
-                    System.out.print("Choisir la méthode à utiliser (KMP ou Automate)");
+                    System.out.println("Choisir la méthode à utiliser (KMP ou Automate)");
                     algo = sc.nextLine();
                     choseMethod(args, algo);
                 }

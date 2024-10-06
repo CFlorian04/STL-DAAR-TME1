@@ -1,4 +1,4 @@
-package algorithme_automate;
+
 import java.util.ArrayList;
 
 public class RegExTree {

@@ -1,8 +1,5 @@
-package tests;
-import java.util.Arrays;
 
-import algorithme_KMP.AlgorithmeKMP;
-import algorithme_automate.RegEx;
+import java.util.Arrays;
 
 public class Tests {
 
@@ -39,8 +36,8 @@ public class Tests {
                 "Hooick"
         };
 
-        // test_single_motif_min_max(motif, fichier, true, repetitions);
-        test_KMP(motifs, fichier, true, repetitions);
+        test_KMP(motifs, fichier, false, repetitions);
+        test_Automate(motifs, fichier, true, repetitions);
     }
     
 

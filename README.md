@@ -2,6 +2,7 @@
 Pour lancer le programme, il faut prendre le fichier project.jar qui se trouve dans le dossier ./src/build/project.jar et l'executer avec soit le commande:
 ```bash
 java -jar project.jar
+
 soit
 
 ```bash

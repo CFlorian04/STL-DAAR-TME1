@@ -1,11 +1,19 @@
 # STL-DAAR-TME1
-Pour lancer le programme, il faut prendre le fichier project.jar qui se trouve dans le dossier ./src/build/project.jar et l'executer avec soit le commande:
+Pour lancer le programme, il faut prendre le fichier `project.jar` qui se trouve dans le dossier `./src/build/project.jar` et l'exécuter avec soit la commande suivante :
+
 ```bash
 java -jar project.jar
 ```
-soit
+
+ou bien :
 
 ```bash
 java -jar project.jar "pattern" textPath methode
 ```
-Où le pattern correspond au motif à rechercher, le textPath au chemin pour accéder au fichier texte. La méthode est soit Automate soit KMP. 
+
+où :
+- `pattern` correspond au motif à rechercher,
+- `textPath` au chemin d'accès au fichier texte,
+- `methode` peut être soit `Automate`, soit `KMP`.
+
+Les paramètres ne sont pas obligatoires et peuvent être de 1, 2, ou 3 au total.
